@@ -1,0 +1,23 @@
+// This file is no longer in use as we are deploying to Railway instead of Vercel.
+// Keep for reference only.
+
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "index.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "index.js"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production",
+    "VERCEL": "true"
+  },
+  "outputDirectory": "public"
+} 

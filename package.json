@@ -1,0 +1,43 @@
+{
+  "name": "college-hub",
+  "version": "1.0.0",
+  "description": "College Hub - A platform for students to access educational resources",
+  "main": "parse-server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon -r dotenv/config --experimental-json-modules parse-server.js",
+    "start": "node -r dotenv/config --experimental-json-modules parse-server.js",
+    "build": "echo 'No build step required'"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "keywords": [
+    "education",
+    "college",
+    "student",
+    "notes",
+    "question papers"
+  ],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "body": "^5.1.0",
+    "cloudinary": "^2.6.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.12.2",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.2",
+    "parse-dashboard": "^4.2.0",
+    "parse-server": "^6.3.0",
+    "sharp": "^0.33.5",
+    "sib-api-v3-sdk": "^8.5.0"
+  }
+}

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Hub - Student Registration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to bottom, #1e3a8a, #3b82f6);
+        }
+        .form-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        .error-message {
+            color: #dc2626;
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+        .success-message {
+            color: #16a34a;
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+        input:invalid[focused="true"] ~ .error-message,
+        select:invalid[focused="true"] ~ .error-message {
+            display: block;
+        }
+        input:valid[focused="true"] ~ .success-message,
+        select:valid[focused="true"] ~ .success-message {
+            display: block;
+        }
+        .password-toggle {
+            cursor: pointer;
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .animate-bounce-slow {
+            animation: bounceSlow 3s infinite ease-in-out;
+        }
+        @keyframes bounceSlow {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+        .input-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #4b5563;
+        }
+        .input-with-icon {
+            padding-left: 2.5rem;
+        }
+        .quote-container {
+            background: #fefcbf;
+            border-left: 4px solid #ca8a04;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen py-12">
+    <div class="form-container p-8 w-full max-w-lg mx-4 animate-fade-in">
+        <!-- Header -->
+        <div class="text-center mb-6">
+            <i class="fas fa-book-open text-5xl text-indigo-700 mb-4 animate-bounce-slow"></i>
+            <h1 class="text-3xl font-extrabold text-gray-900">College Hub Registration</h1>
+            <p class="text-sm text-gray-600 mt-2">Start your academic journey with us!</p>
+        </div>
+
+        <!-- Form -->
+        <form id="registrationForm" class="space-y-5" action="/api/register" method="POST">
+            <!-- Roll Number -->
+            <div class="relative">
+                <label for="rollnumber" class="block text-sm font-medium text-gray-700">Roll Number</label>
+                <!-- <i class="fas fa-id-badge input-icon"></i> -->
+                <input
+                    type="text"
+                    id="rollnumber"
+                    name="rollnumber"
+                    required
+                    pattern="[A-Za-z0-9]+"
+                    class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm input-with-icon transition duration-300 hover:border-indigo-400"
+                    placeholder="e.g., 23C7XXXX"
+                    focused="false"
+                >
+                <p class="error-message">Enter a valid roll number (alphanumeric).</p>
+                <p class="success-message">Looks great!</p>
+            </div>
+
+            <!-- Name -->
+            <div class="relative">
+                <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
+                <!-- <i class="fas fa-user input-icon"></i> -->
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    required
+                    minlength="2"
+                    maxlength="50"
+                    class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm input-with-icon transition duration-300 hover:border-indigo-400"
+                    focused="false"
+                >
+                <p class="error-message">Name must be 2–50 characters.</p>
+                <p class="success-message">Perfect!</p>
+            </div>
+
+            <!-- Branch -->
+            <div class="relative">
+                <label for="branch" class="block text-sm font-medium text-gray-700">Branch</label>
+                <!-- <i class="fas fa-graduation-cap input-icon"></i> -->
+                <select
+                    id="branch"
+                    name="branch"
+                    required
+                    class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm input-with-icon transition duration-300 hover:border-indigo-400"
+                    focused="false"
+                >
+                    <option value="" disabled selected>Select your branch</option>
+                    <option value="CSE">CSE</option>
+                    <option value="ECE">ECE</option>
+                    <option value="EEE">EEE</option>
+                    <option value="MECH">MECH</option>
+                    <option value="CIVIL">CIVIL</option>
+                    <option value="IT">IT</option>
+                    <option value="CSC">CSC</option>
+                    <option value="DS">DS</option>
+                    <option value="OTHER">OTHER</option>
+                </select>
+                <p class="error-message">Please select a branch.</p>
+                <p class="success-message">Nice choice!</p>
+            </div>
+
+            <!-- Semester -->
+            <div class="relative">
+                <label for="sem" class="block text-sm font-medium text-gray-700">Semester</label>
+                <!-- <i class="fas fa-calendar-check input-icon"></i> -->
+                <input
+                    type="number"
+                    id="sem"
+                    name="sem"
+                    required
+                    min="1"
+                    max="8"
+                    class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm input-with-icon transition duration-300 hover:border-indigo-400"
+                    placeholder="e.g., 3"
+                    focused="false"
+                >
+                <p class="error-message">Semester must be 1–8.</p>
+                <p class="success-message">All set!</p>
+            </div>
+
+            <!-- Phone Number -->
+            <div class="relative">
+                <label for="phonenumber" class="block text-sm font-medium text-gray-700">Phone Number</label>
+                <!-- <i class="fas fa-phone input-icon"></i> -->
+                <input
+                    type="tel"
+                    id="phonenumber"
+                    name="phonenumber"
+                    required
+                    pattern="\d{10}"
+                    class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm input-with-icon transition duration-300 hover:border-indigo-400"
+                    placeholder="1234567890"
+                    focused="false"
+                >
+                <p class="error-message">Enter a 10-digit phone number.</p>
+                <p class="success-message">Good to go!</p>
+            </div>
+
+            <!-- Email -->
+            <div class="relative">
+                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                <!-- <i class="fas fa-envelope input-icon"></i> -->
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm input-with-icon transition duration-300 hover:border-indigo-400"
+                    placeholder="example@college.com"
+                    focused="false"
+                >
+                <p class="error-message">Enter a valid email address.</p>
+                <p class="success-message">Email looks good!</p>
+            </div>
+
+            <!-- Password -->
+            <div class="relative">
+                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                <!-- <i class="fas fa-lock input-icon"></i> -->
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    required
+                    minlength="8"
+                    class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm input-with-icon transition duration-300 hover:border-indigo-400"
+                    placeholder="********"
+                    focused="false"
+                >
+                <i id="passwordToggle" class="fas fa-eye absolute right-4 top-[60%] transform -translate-y-1/2 password-toggle text-gray-500"></i>
+                <p class="error-message">Password must be at least 8 characters.</p>
+                <p class="success-message">Strong password!</p>
+            </div>
+
+            <!-- Submit Button -->
+            <div>
+                <button
+                    type="submit"
+                    id="submitButton"
+                    class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-md text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-300 transform hover:scale-105"
+                >
+                    Register Now
+                </button>
+            </div>
+        </form>
+
+        <!-- Form Message -->
+        <p id="formMessage" class="mt-4 text-center text-sm text-gray-600" aria-live="polite"></p>
+
+        <!-- Quote -->
+        <div class="quote-container mt-6 p-4 rounded-lg">
+            <p class="text-sm italic text-gray-800">
+                "Education is the most powerful weapon which you can use to change the world." – Nelson Mandela
+            </p>
+        </div>
+
+        <!-- Login Link -->
+        <p class="mt-4 text-center text-sm text-gray-600">
+            Already have an account? <a href="/StudentLogin" class="text-indigo-600 hover:text-indigo-800 font-medium">Login</a>
+        </p>
+    </div>
+
+    <script>
+        const form = document.getElementById('registrationForm');
+        const formMessage = document.getElementById('formMessage');
+        const submitButton = document.getElementById('submitButton');
+        const passwordInput = document.getElementById('password');
+        const passwordToggle = document.getElementById('passwordToggle');
+
+        // Real-time validation
+        const inputs = form.querySelectorAll('input, select');
+        inputs.forEach(input => {
+            input.addEventListener('blur', () => {
+                input.setAttribute('focused', 'true');
+            });
+        });
+
+        // Password toggle
+        passwordToggle.addEventListener('click', () => {
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                passwordToggle.classList.remove('fa-eye');
+                passwordToggle.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                passwordToggle.classList.remove('fa-eye-slash');
+                passwordToggle.classList.add('fa-eye');
+            }
+        });
+
+        // Form submission
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            formMessage.textContent = '';
+            submitButton.disabled = true;
+            submitButton.textContent = 'Registering...';
+
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData);
+
+            try {
+                const response = await fetch('/api/v1/students/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data),
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    formMessage.classList.add('text-green-600', 'animate-fade-in');
+                    formMessage.textContent = result.message || 'Registration successful! Welcome to College Hub!';
+                    form.reset();
+                    inputs.forEach(input => input.setAttribute('focused', 'false'));
+                    // Redirect to login page after 2 seconds
+                    setTimeout(() => { window.location.href = '/StudentLogin'; }, 2000);
+                } else {
+                    formMessage.classList.add('text-red-600');
+                    formMessage.textContent = result.message || 'Registration failed. Please try again.';
+                }
+            } catch (error) {
+                formMessage.classList.add('text-red-600');
+                formMessage.textContent = 'An error occurred. Please try again later.';
+                console.error(error);
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Register Now';
+            }
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,472 @@
+{
+	"info": {
+		"_postman_id": "9576d30e-f21b-47c0-a608-4d73dd074226",
+		"name": "College Hub",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40369372"
+	},
+	"item": [
+		{
+			"name": "Student",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"ashwith\",\r\n    \"rollnumber\":\"24C71A0539\",\r\n    \"branch\":\"CSE\",\r\n    \"sem\":\"3\",\r\n    \"phonenumber\":\"1234567890\",\r\n    \"email\":\"ashwith1234@gmail.com\",\r\n    \"password\":\"kalki1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/students/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"students",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"rollnumber\":\"24C71A0539\",\r\n    \"password\":\"kalki1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/students/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"students",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/v1/students/logout",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"students",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Notes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/v1/students/getnotes?subject=DS",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"students",
+								"getnotes"
+							],
+							"query": [
+								{
+									"key": "subject",
+									"value": "DS"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Question Paper",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/v1/students/getquestionpapers?subject=PPS",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"students",
+								"getquestionpapers"
+							],
+							"query": [
+								{
+									"key": "subject",
+									"value": "PPS"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Notices",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/v1/students/getnotices",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"students",
+								"getnotices"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Faculty",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"supriya\",\r\n    \"phoneNumber\":\"9898989898\",\r\n    \"branch\":\"CSC\",\r\n    \"password\":\"supriya1234\",\r\n    \"email\":\"supriya@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/faculty/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"faculty",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"supriya@gmail.com\",\r\n    \"password\":\"supriya1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/faculty/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"faculty",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/v1/faculty/logout",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"faculty",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Notes",
+			"item": [
+				{
+					"name": "AddNotes",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "Data Structures",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "its a ds notes discription",
+									"type": "text"
+								},
+								{
+									"key": "subject",
+									"value": "DS",
+									"type": "text"
+								},
+								{
+									"key": "branch",
+									"value": "CSE",
+									"type": "text"
+								},
+								{
+									"key": "sem",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "unit",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "notes",
+									"type": "file",
+									"src": "postman-cloud:///1f00b22a-cd59-4f00-8f16-db93f47f0462"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/notes/addnotes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"notes",
+								"addnotes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Notes",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/v1/notes/deletenotes/67e58e8539441b8f367529fd",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"notes",
+								"deletenotes",
+								"67e58e8539441b8f367529fd"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Notices",
+			"item": [
+				{
+					"name": "Add Notices",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\":\"BioMetric\", \r\n    \"description\":\"there is a BioMetric Registration for students so all the students must attend college\", \r\n    \"sem\":3, \r\n    \"branch\":\"CSE\", \r\n    \"batchyear\":24\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/notices/addnotices",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"notices",
+								"addnotices"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Question Papers",
+			"item": [
+				{
+					"name": "Add Question Paper",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "subject",
+									"value": "PPS",
+									"type": "text"
+								},
+								{
+									"key": "year",
+									"value": "2023",
+									"type": "text"
+								},
+								{
+									"key": "branch",
+									"value": "CSC",
+									"type": "text"
+								},
+								{
+									"key": "sem",
+									"value": "3",
+									"type": "text"
+								},
+								{
+									"key": "questionpaper",
+									"type": "file",
+									"src": "postman-cloud:///1f00b22a-cd59-4f00-8f16-db93f47f0462"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/v1/questionpaper/addquestionpaper",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"questionpaper",
+								"addquestionpaper"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Question Paper",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/v1/questionpaper/deletequestionpaper/67e81acd53adecc84a532b45",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"questionpaper",
+								"deletequestionpaper",
+								"67e81acd53adecc84a532b45"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
