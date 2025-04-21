@@ -41,13 +41,14 @@ async function startServer() {
     await connectDb();
     console.log("DATABASE CONNECTED SUCCESSFULLY");
 
-    // Determine port (Railway sets PORT env var automatically)
+    // Determine port (Render sets PORT env var automatically)
     const preferredPort = process.env.PORT || 3000;
     
-    // On Railway, we don't need to find an available port, just use the provided one
-    if (process.env.RAILWAY_ENVIRONMENT) {
+    // On Render, we don't need to find an available port, just use the provided one
+    const isProduction = process.env.NODE_ENV === 'production';
+    if (isProduction) {
       app.listen(preferredPort, '0.0.0.0', () => {
-        console.log(`🚀 Server running on Railway on port ${preferredPort}`);
+        console.log(`🚀 Server running on Render on port ${preferredPort}`);
       });
       return;
     }

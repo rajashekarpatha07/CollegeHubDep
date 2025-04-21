@@ -2,11 +2,11 @@
   "name": "college-hub",
   "version": "1.0.0",
   "description": "College Hub - A platform for students to access educational resources",
-  "main": "parse-server.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon -r dotenv/config --experimental-json-modules parse-server.js",
-    "start": "node -r dotenv/config --experimental-json-modules parse-server.js",
+    "dev": "nodemon -r dotenv/config --experimental-json-modules index.js",
+    "start": "node -r dotenv/config --experimental-json-modules index.js",
     "build": "echo 'No build step required'"
   },
   "engines": {
@@ -35,8 +35,6 @@
     "mongoose": "^8.12.2",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.2",
-    "parse-dashboard": "^4.2.0",
-    "parse-server": "^6.3.0",
     "sharp": "^0.33.5",
     "sib-api-v3-sdk": "^8.5.0"
   }
