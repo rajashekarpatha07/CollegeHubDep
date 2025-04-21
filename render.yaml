@@ -3,7 +3,7 @@ services:
     name: college-hub
     runtime: node
     buildCommand: npm install
-    startCommand: node parse-server.js
+    startCommand: node parse-server.cjs
     envVars:
       - key: NODE_ENV
         value: production

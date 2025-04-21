@@ -28,19 +28,29 @@ app.use((req, res, next) => {
 // CORS configuration
 const corsOptions = {
   origin: function (origin, callback) {
-    const allowedOrigins = [
-      'http://localhost:3000',
-      'http://localhost:5173',
-      'http://127.0.0.1:5173',
-      'https://college-hub-frontend.vercel.app',
-      'https://college-hub-rajas.vercel.app'
-    ];
-    
-    // Allow requests with no origin (like mobile apps, curl requests)
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+    // In production, allow any origin (since we'll have multiple Render deployments)
+    if (process.env.NODE_ENV === 'production') {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      // For development, use allowed origins list
+      const allowedOrigins = [
+        'http://localhost:3000',
+        'http://localhost:5173',
+        'http://127.0.0.1:5173',
+        'https://college-hub-frontend.vercel.app',
+        'https://college-hub-rajas.vercel.app',
+        // Add Render domains
+        'https://college-hub.onrender.com',
+        'https://*.onrender.com'
+      ];
+      
+      // Allow requests with no origin (like mobile apps, curl requests)
+      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        console.log('CORS blocked origin:', origin);
+        callback(new Error('Not allowed by CORS'));
+      }
     }
   },
   credentials: true,

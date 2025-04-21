@@ -1,13 +1,19 @@
-// Pure CommonJS entry point for Render
+// ES Module entry point for Render
 // This file is specifically required because Render looks for parse-server.js
 
 console.log("=== Starting parse-server.js ===");
 console.log("Node version:", process.version);
 
-// Basic dependencies
-const fs = require('fs');
-const path = require('path');
-const { spawn } = require('child_process');
+// Basic dependencies 
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+import { spawn } from 'child_process';
+
+// Get current directory
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // Display environment info
 console.log("Current directory:", process.cwd());
@@ -31,6 +37,7 @@ const entryPoints = [
   {file: 'index.js', args: ['-r', 'dotenv/config', '--experimental-json-modules', 'index.js']},
   {file: 'server.js', args: ['-r', 'dotenv/config', '--experimental-json-modules', 'server.js']},
   {file: 'start.js', args: ['-r', 'dotenv/config', '--experimental-json-modules', 'start.js']},
+  {file: 'parse-server.cjs', args: ['parse-server.cjs']},
   {file: 'index.cjs', args: ['index.cjs']},
   {file: 'start-render.js', args: ['start-render.js']},
   {file: 'simple-server.js', args: ['simple-server.js']}
@@ -76,11 +83,13 @@ if (entryPoint) {
 }
 
 // Emergency server as last resort
-function startEmergencyServer() {
+async function startEmergencyServer() {
   console.log("\n=== STARTING EMERGENCY SERVER ===");
   
   try {
-    const express = require('express');
+    // Import express dynamically
+    const expressModule = await import('express');
+    const express = expressModule.default;
     const app = express();
     const port = process.env.PORT || 10000;
     

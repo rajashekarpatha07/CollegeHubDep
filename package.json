@@ -11,6 +11,7 @@
     "start:server": "node -r dotenv/config --experimental-json-modules server.js",
     "start:cjs": "node index.cjs",
     "start:parse": "node parse-server.js",
+    "start:parse-cjs": "node parse-server.cjs",
     "start:render": "node start-render.js",
     "debug": "node debug.js",
     "build": "echo 'No build step required'"
