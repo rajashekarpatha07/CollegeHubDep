@@ -7,6 +7,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon -r dotenv/config --experimental-json-modules index.js",
     "start": "node -r dotenv/config --experimental-json-modules index.js",
+    "start:alt": "node -r dotenv/config --experimental-json-modules start.js",
+    "start:server": "node -r dotenv/config --experimental-json-modules server.js",
+    "start:cjs": "node index.cjs",
+    "debug": "node debug.js",
     "build": "echo 'No build step required'"
   },
   "engines": {

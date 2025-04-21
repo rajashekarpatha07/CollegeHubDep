@@ -2,8 +2,27 @@ services:
   - type: web
     name: college-hub
     runtime: node
-    buildCommand: npm install
-    startCommand: npm start
+    buildCommand: npm install && ls -la
+    startCommand: >
+      if [ -f "index.js" ]; then
+        echo "Found index.js. Starting with index.js..."
+        node -r dotenv/config --experimental-json-modules index.js
+      elif [ -f "index.cjs" ]; then
+        echo "Found index.cjs. Starting with index.cjs..."
+        node index.cjs
+      elif [ -f "server.js" ]; then
+        echo "Found server.js. Starting with server.js..."
+        node -r dotenv/config --experimental-json-modules server.js
+      elif [ -f "start.js" ]; then
+        echo "Found start.js. Starting with start.js..."
+        node -r dotenv/config --experimental-json-modules start.js
+      elif [ -f "debug.js" ]; then
+        echo "Running debug script..."
+        node debug.js
+      else
+        echo "No main entry file found. Using default npm start..."
+        npm start
+      fi
     envVars:
       - key: NODE_ENV
         value: production

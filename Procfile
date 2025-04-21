@@ -1,1 +1,1 @@
-web: npm start 
+web: node -r dotenv/config --experimental-json-modules index.js 
