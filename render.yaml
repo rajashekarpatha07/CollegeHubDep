@@ -2,9 +2,15 @@ services:
   - type: web
     name: college-hub
     runtime: node
-    buildCommand: npm install && ls -la
+    buildCommand: chmod +x build.sh && ./build.sh
     startCommand: >
-      if [ -f "index.js" ]; then
+      if [ -f "parse-server.js" ]; then
+        echo "Found parse-server.js. Starting with parse-server.js..."
+        node parse-server.js
+      elif [ -f "parse-server.cjs" ]; then
+        echo "Found parse-server.cjs. Starting with parse-server.cjs..."
+        node parse-server.cjs
+      elif [ -f "index.js" ]; then
         echo "Found index.js. Starting with index.js..."
         node -r dotenv/config --experimental-json-modules index.js
       elif [ -f "index.cjs" ]; then

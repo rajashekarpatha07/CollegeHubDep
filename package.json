@@ -10,6 +10,7 @@
     "start:alt": "node -r dotenv/config --experimental-json-modules start.js",
     "start:server": "node -r dotenv/config --experimental-json-modules server.js",
     "start:cjs": "node index.cjs",
+    "start:parse": "node parse-server.js",
     "debug": "node debug.js",
     "build": "echo 'No build step required'"
   },
