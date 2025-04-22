@@ -144,3 +144,21 @@ dist
 .svelte-kit
 
 # End of https://www.toptal.com/developers/gitignore/api/node
+
+# Deployment troubleshooting files
+.render-buildpacks
+build.sh
+build-render.sh
+debug.js
+index.cjs
+parse-server-express.js
+parse-server.cjs
+parse-server.js
+Procfile.render
+server.js
+setup-render.sh
+simple-server.js
+start-render.js
+start.js
+vercel.json
+cleanup.md

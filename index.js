@@ -41,16 +41,15 @@ async function startServer() {
     await connectDb();
     console.log("DATABASE CONNECTED SUCCESSFULLY");
 
-    // Determine port (Render sets PORT env var automatically)
-    const preferredPort = process.env.PORT || 10000;
+    // Always use the PORT environment variable, default to 10000
+    // This is critical for cloud platforms like Render
+    const port = process.env.PORT || 10000;
     
-    // On Render, we don't need to find an available port, just use the provided one
+    // In production, use 0.0.0.0 to bind to all network interfaces
     const isProduction = process.env.NODE_ENV === 'production';
     if (isProduction) {
-      // For Render deployment, use the provided PORT which is likely 10000
-      app.listen(preferredPort, '0.0.0.0', () => {
-        console.log(`🚀 Server running on Render on port ${preferredPort}`);
-        // Log env vars to help debug
+      app.listen(port, '0.0.0.0', () => {
+        console.log(`🚀 Server running on Render on port ${port}`);
         console.log('Environment:', process.env.NODE_ENV);
         console.log('CORS_ORIGIN:', process.env.CORS_ORIGIN);
       });
@@ -59,7 +58,7 @@ async function startServer() {
     
     // For local development, find an available port
     try {
-      const availablePort = await findAvailablePort(preferredPort);
+      const availablePort = await findAvailablePort(port);
       app.listen(availablePort, () => {
         console.log(`🚀 Server running locally on port ${availablePort}`);
       });

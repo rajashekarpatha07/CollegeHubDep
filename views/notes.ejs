@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Hub - Notes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @keyframes slideFade {
+            0% {
+              opacity: 0;
+              transform: translateY(-20px);
+            }
+            100% {
+              opacity: 1;
+              transform: translateY(0);
+            }
+        }
+          
+        body {
+            background-color: #f3f4f6;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            transition: all 0.3s ease;
+        }
+        .sidebar {
+            background: linear-gradient(to bottom, #1e3a8a, #3b82f6);
+            box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .note-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .note-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* Loading indicator */
+        .loading {
+            display: flex;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.8);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* Filter tags */
+        .filter-tag {
+            background-color: #e0e7ff;
+            color: #4338ca;
+            border-radius: 9999px;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .filter-tag:hover, .filter-tag.active {
+            background-color: #4338ca;
+            color: white;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                z-index: 40;
+                width: 250px;
+                left: -250px;
+                height: 100%;
+            }
+            .sidebar.open {
+                left: 0;
+            }
+            .overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 30;
+            }
+            .overlay.active {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Loading indicator -->
+    <div id="loading" class="loading">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Mobile menu toggle button -->
+    <button id="menuToggle" class="fixed top-4 left-4 bg-indigo-600 text-white p-2 rounded-lg z-50 shadow-lg md:hidden">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Overlay for mobile -->
+    <div id="overlay" class="overlay"></div>
+
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <div id="sidebar" class="sidebar w-64 p-6 text-white flex flex-col">
+            <div class="flex items-center mb-10">
+                <i class="fas fa-book-open text-3xl"></i>
+                <h1 class="text-xl font-bold ml-3">College Hub</h1>
+            </div>
+            
+            <nav class="flex-grow">
+                <ul class="space-y-3">
+                    <li class="p-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition">
+                        <a href="/dashboard" class="flex items-center" aria-label="Dashboard">
+                            <i class="fas fa-home w-5" aria-hidden="true"></i>
+                            <span class="ml-3">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="p-3 rounded-lg bg-white bg-opacity-20">
+                        <a href="/notes" class="flex items-center" aria-label="View notes">
+                            <i class="fas fa-book w-5" aria-hidden="true"></i>
+                            <span class="ml-3">Notes</span>
+                        </a>
+                    </li>
+                    <li class="p-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition">
+                        <a href="/questionpapers" class="flex items-center" aria-label="View question papers">
+                            <i class="fas fa-file-alt w-5" aria-hidden="true"></i>
+                            <span class="ml-3">Question Papers</span>
+                        </a>
+                    </li>
+                    <li class="p-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition">
+                        <a href="/notices" class="flex items-center" aria-label="View notices">
+                            <i class="fas fa-bell w-5" aria-hidden="true"></i>
+                            <span class="ml-3">Notices</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="mt-auto">
+                <form id="logoutForm" action="/api/v1/students/logout" method="POST">
+                    <button type="submit" class="w-full p-3 rounded-lg bg-red-500 hover:bg-red-600 transition flex items-center justify-center" aria-label="Logout">
+                        <i class="fas fa-sign-out-alt w-5" aria-hidden="true"></i>
+                        <span class="ml-2">Logout</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="flex-grow p-4 md:p-8 overflow-y-auto ml-0 md:ml-64">
+            <!-- Top bar -->
+            <div class="flex justify-between items-center mb-6 md:mb-8 mt-10 md:mt-0">
+                <h1 class="text-xl md:text-2xl font-bold text-gray-800">Study Notes</h1>
+                <div class="flex items-center">
+                    <span class="text-gray-600 mr-2 md:mr-4 hidden sm:inline">Welcome, <%= student?.name || 'Student' %></span>
+                    <div class="bg-indigo-600 text-white w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center">
+                        <span><%= student?.name?.charAt(0) || 'S' %></span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Filter and Search Section -->
+            <div class="bg-white rounded-lg shadow p-4 mb-6 animate-fade-in">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
+                    <h2 class="text-lg font-semibold text-gray-800">Filter Notes</h2>
+                    <div class="relative">
+                        <input id="searchInput" type="text" placeholder="Search by title or subject..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg w-full md:w-64 focus:ring-indigo-500 focus:border-indigo-500">
+                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Branch Filter -->
+                    <div>
+                        <label for="branchFilter" class="block text-sm font-medium text-gray-700 mb-1">Branch</label>
+                        <select id="branchFilter" class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                            <option value="">All Branches</option>
+                            <option value="CSE">CSE</option>
+                            <option value="ECE">ECE</option>
+                            <option value="EEE">EEE</option>
+                            <option value="MECH">MECH</option>
+                            <option value="CIVIL">CIVIL</option>
+                            <option value="IT">IT</option>
+                            <option value="CSC">CSC</option>
+                            <option value="DS">DS</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Semester Filter -->
+                    <div>
+                        <label for="semFilter" class="block text-sm font-medium text-gray-700 mb-1">Semester</label>
+                        <select id="semFilter" class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                            <option value="">All Semesters</option>
+                            <option value="1">Semester 1</option>
+                            <option value="2">Semester 2</option>
+                            <option value="3">Semester 3</option>
+                            <option value="4">Semester 4</option>
+                            <option value="5">Semester 5</option>
+                            <option value="6">Semester 6</option>
+                            <option value="7">Semester 7</option>
+                            <option value="8">Semester 8</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Unit Filter -->
+                    <div>
+                        <label for="unitFilter" class="block text-sm font-medium text-gray-700 mb-1">Unit</label>
+                        <select id="unitFilter" class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                            <option value="">All Units</option>
+                            <option value="1">Unit 1</option>
+                            <option value="2">Unit 2</option>
+                            <option value="3">Unit 3</option>
+                            <option value="4">Unit 4</option>
+                            <option value="5">Unit 5</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Subject Tags -->
+                <div class="mt-4">
+                    <p class="text-sm font-medium text-gray-700 mb-2">Popular Subjects</p>
+                    <div id="subjectTags" class="flex flex-wrap gap-2">
+                        <!-- Subject tags will be dynamically populated -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Notes Grid -->
+            <div id="notesContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 animate-fade-in">
+                <!-- Notes will be dynamically populated here -->
+                <div class="note-card p-4 flex flex-col h-64 justify-between">
+                    <div class="animate-pulse">
+                        <div class="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
+                        <div class="h-4 bg-gray-200 rounded w-1/2 mb-6"></div>
+                        <div class="h-3 bg-gray-200 rounded w-full mb-2"></div>
+                        <div class="h-3 bg-gray-200 rounded w-5/6 mb-2"></div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <div class="h-8 bg-gray-200 rounded w-24 animate-pulse"></div>
+                        <div class="h-8 bg-gray-200 rounded-full w-8 animate-pulse"></div>
+                    </div>
+                </div>
+                
+                <div class="note-card p-4 flex flex-col h-64 justify-between">
+                    <div class="animate-pulse">
+                        <div class="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
+                        <div class="h-4 bg-gray-200 rounded w-1/2 mb-6"></div>
+                        <div class="h-3 bg-gray-200 rounded w-full mb-2"></div>
+                        <div class="h-3 bg-gray-200 rounded w-5/6 mb-2"></div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <div class="h-8 bg-gray-200 rounded w-24 animate-pulse"></div>
+                        <div class="h-8 bg-gray-200 rounded-full w-8 animate-pulse"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Empty State -->
+            <div id="emptyState" class="hidden text-center py-12 animate-fade-in">
+                <div class="mx-auto w-24 h-24 flex items-center justify-center rounded-full bg-gray-100 mb-6">
+                    <i class="fas fa-book-open text-3xl text-gray-400"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-700 mb-2">No Notes Found</h3>
+                <p class="text-gray-500 max-w-md mx-auto">Try adjusting your search or filter criteria, or check back later for new content.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Note Preview Modal -->
+    <div id="noteModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-hidden">
+            <div class="p-4 border-b flex justify-between items-center">
+                <h3 id="modalTitle" class="text-lg font-bold text-gray-800">Note Title</h3>
+                <button id="closeModal" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="p-4 overflow-y-auto">
+                <div class="mb-4">
+                    <div class="flex items-center gap-2 mb-3">
+                        <div class="bg-indigo-100 text-indigo-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">
+                            <span id="modalSubject">Subject</span>
+                        </div>
+                        <div class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">
+                            <span id="modalBranch">Branch</span>
+                        </div>
+                        <div class="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">
+                            Semester <span id="modalSem">0</span>
+                        </div>
+                        <div class="bg-amber-100 text-amber-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">
+                            Unit <span id="modalUnit">0</span>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-2">Uploaded by: <span id="modalUploader" class="font-medium"></span></p>
+                    <p id="modalDescription" class="text-gray-700 mb-4"></p>
+                </div>
+                
+                <div class="aspect-video bg-gray-100 rounded-lg mb-4 flex items-center justify-center">
+                    <iframe id="pdfViewer" class="w-full h-full" src="" frameborder="0"></iframe>
+                </div>
+            </div>
+            <div class="p-4 border-t flex justify-end">
+                <a id="downloadButton" href="#" target="_blank" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg flex items-center gap-2 transition-colors">
+                    <i class="fas fa-download"></i>
+                    <span>Download</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        });
+
+        overlay.addEventListener('click', () => {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        });
+        
+        // Notes data and UI management
+        let allNotes = [];
+        let filteredNotes = [];
+        let subjects = new Set();
+        
+        // DOM elements
+        const notesContainer = document.getElementById('notesContainer');
+        const emptyState = document.getElementById('emptyState');
+        const searchInput = document.getElementById('searchInput');
+        const branchFilter = document.getElementById('branchFilter');
+        const semFilter = document.getElementById('semFilter');
+        const unitFilter = document.getElementById('unitFilter');
+        const subjectTags = document.getElementById('subjectTags');
+        const loading = document.getElementById('loading');
+        
+        // Modal elements
+        const noteModal = document.getElementById('noteModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalSubject = document.getElementById('modalSubject');
+        const modalBranch = document.getElementById('modalBranch');
+        const modalSem = document.getElementById('modalSem');
+        const modalUnit = document.getElementById('modalUnit');
+        const modalUploader = document.getElementById('modalUploader');
+        const modalDescription = document.getElementById('modalDescription');
+        const pdfViewer = document.getElementById('pdfViewer');
+        const downloadButton = document.getElementById('downloadButton');
+        const closeModal = document.getElementById('closeModal');
+        
+        // Fetch notes data
+        async function fetchNotes() {
+            try {
+                loading.style.display = 'flex';
+                
+                const response = await fetch('/api/v1/students/getnotes');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch notes');
+                }
+                
+                const data = await response.json();
+                allNotes = data.data || [];
+                filteredNotes = [...allNotes];
+                
+                // Extract unique subjects
+                allNotes.forEach(note => {
+                    subjects.add(note.subject);
+                });
+                
+                // Populate subject tags
+                populateSubjectTags();
+                
+                // Initial rendering
+                renderNotes();
+            } catch (error) {
+                console.error('Error fetching notes:', error);
+                showErrorMessage('Failed to load notes. Please try again later.');
+            } finally {
+                loading.style.display = 'none';
+            }
+        }
+        
+        // Populate subject tags
+        function populateSubjectTags() {
+            subjectTags.innerHTML = '';
+            subjects.forEach(subject => {
+                const tag = document.createElement('div');
+                tag.className = 'filter-tag';
+                tag.textContent = subject;
+                tag.onclick = () => {
+                    searchInput.value = '';
+                    branchFilter.value = '';
+                    semFilter.value = '';
+                    unitFilter.value = '';
+                    
+                    // Toggle active class
+                    document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
+                    tag.classList.add('active');
+                    
+                    // Filter by subject
+                    filteredNotes = allNotes.filter(note => note.subject === subject);
+                    renderNotes();
+                };
+                subjectTags.appendChild(tag);
+            });
+        }
+        
+        // Render notes
+        function renderNotes() {
+            notesContainer.innerHTML = '';
+            
+            if (filteredNotes.length === 0) {
+                emptyState.classList.remove('hidden');
+                return;
+            }
+            
+            emptyState.classList.add('hidden');
+            
+            filteredNotes.forEach(note => {
+                const card = document.createElement('div');
+                card.className = 'note-card p-4 flex flex-col h-64 justify-between animate-fade-in';
+                
+                // Subject color mapping
+                const subjectColors = {
+                    'DS': 'bg-blue-100 text-blue-800',
+                    'CN': 'bg-green-100 text-green-800',
+                    'OS': 'bg-red-100 text-red-800',
+                    'DBMS': 'bg-purple-100 text-purple-800',
+                    'ML': 'bg-indigo-100 text-indigo-800',
+                    'AI': 'bg-pink-100 text-pink-800',
+                    'WEB': 'bg-teal-100 text-teal-800',
+                    'SE': 'bg-amber-100 text-amber-800',
+                    'MOBILE': 'bg-lime-100 text-lime-800'
+                };
+                
+                const subjectColor = subjectColors[note.subject] || 'bg-gray-100 text-gray-800';
+                
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-lg font-semibold text-gray-800 line-clamp-2">${note.title}</h3>
+                            <span class="${subjectColor} text-xs font-semibold px-2.5 py-0.5 rounded-full">${note.subject}</span>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-2">Unit ${note.unit} • Sem ${note.sem} • ${note.branch}</p>
+                        <p class="text-sm text-gray-600 line-clamp-3">${note.description}</p>
+                    </div>
+                    <div class="flex justify-between items-center mt-4">
+                        <span class="text-xs text-gray-500">Uploaded by: ${note.uploadedBy}</span>
+                        <button class="view-note bg-indigo-600 hover:bg-indigo-700 text-white w-8 h-8 rounded-full flex items-center justify-center transition-colors" aria-label="View note">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                `;
+                
+                card.querySelector('.view-note').addEventListener('click', () => {
+                    openNoteModal(note);
+                });
+                
+                notesContainer.appendChild(card);
+            });
+        }
+        
+        // Open note modal
+        function openNoteModal(note) {
+            modalTitle.textContent = note.title;
+            modalSubject.textContent = note.subject;
+            modalBranch.textContent = note.branch;
+            modalSem.textContent = note.sem;
+            modalUnit.textContent = note.unit;
+            modalUploader.textContent = note.uploadedBy;
+            modalDescription.textContent = note.description;
+            
+            // Set PDF viewer URL
+            pdfViewer.src = note.fileUrl;
+            downloadButton.href = note.fileUrl;
+            
+            noteModal.classList.remove('hidden');
+        }
+        
+        // Close note modal
+        closeModal.addEventListener('click', () => {
+            noteModal.classList.add('hidden');
+            pdfViewer.src = '';
+        });
+        
+        // Close modal when clicking outside
+        noteModal.addEventListener('click', (e) => {
+            if (e.target === noteModal) {
+                noteModal.classList.add('hidden');
+                pdfViewer.src = '';
+            }
+        });
+        
+        // Filter and search functionality
+        function applyFilters() {
+            let filtered = [...allNotes];
+            
+            const searchTerm = searchInput.value.toLowerCase();
+            const branch = branchFilter.value;
+            const sem = semFilter.value;
+            const unit = unitFilter.value;
+            
+            // Clear subject tag selection
+            document.querySelectorAll('.filter-tag').forEach(tag => tag.classList.remove('active'));
+            
+            if (searchTerm) {
+                filtered = filtered.filter(note => 
+                    note.title.toLowerCase().includes(searchTerm) ||
+                    note.subject.toLowerCase().includes(searchTerm) ||
+                    note.description.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            if (branch) {
+                filtered = filtered.filter(note => note.branch === branch);
+            }
+            
+            if (sem) {
+                filtered = filtered.filter(note => note.sem.toString() === sem);
+            }
+            
+            if (unit) {
+                filtered = filtered.filter(note => note.unit.toString() === unit);
+            }
+            
+            filteredNotes = filtered;
+            renderNotes();
+        }
+        
+        // Add event listeners for filters
+        searchInput.addEventListener('input', applyFilters);
+        branchFilter.addEventListener('change', applyFilters);
+        semFilter.addEventListener('change', applyFilters);
+        unitFilter.addEventListener('change', applyFilters);
+        
+        // Error message
+        function showErrorMessage(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'fixed top-4 right-4 bg-red-500 text-white px-4 py-3 rounded-lg shadow-lg z-50 animate-fade-in';
+            errorDiv.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-exclamation-circle mr-2"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            document.body.appendChild(errorDiv);
+            
+            setTimeout(() => {
+                errorDiv.style.opacity = '0';
+                errorDiv.style.transform = 'translateY(-20px)';
+                errorDiv.style.transition = 'opacity 0.3s, transform 0.3s';
+                setTimeout(() => errorDiv.remove(), 300);
+            }, 5000);
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', fetchNotes);
+    </script>
+</body>
+</html> 

@@ -3,7 +3,7 @@ services:
     name: college-hub
     runtime: node
     buildCommand: npm install
-    startCommand: node parse-server.cjs
+    startCommand: npm start
     envVars:
       - key: NODE_ENV
         value: production
@@ -21,6 +21,7 @@ services:
         sync: false
       - key: CLOUDINARY_API_SECRET
         sync: false
+      # Email configuration - ensure API key is active and enabled
       - key: EMAIL_USER
         sync: false
       - key: EMAIL_PASS

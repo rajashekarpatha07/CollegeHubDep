@@ -7,13 +7,6 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon -r dotenv/config --experimental-json-modules index.js",
     "start": "node -r dotenv/config --experimental-json-modules index.js",
-    "start:alt": "node -r dotenv/config --experimental-json-modules start.js",
-    "start:server": "node -r dotenv/config --experimental-json-modules server.js",
-    "start:cjs": "node index.cjs",
-    "start:parse": "node parse-server.js",
-    "start:parse-cjs": "node parse-server.cjs",
-    "start:render": "node start-render.js",
-    "debug": "node debug.js",
     "build": "echo 'No build step required'"
   },
   "engines": {
@@ -38,6 +31,7 @@
     "dotenv": "^16.4.7",
     "ejs": "^3.1.10",
     "express": "^4.21.2",
+    "express-session": "^1.18.1",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.12.2",
     "morgan": "^1.10.0",

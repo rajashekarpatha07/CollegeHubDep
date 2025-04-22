@@ -146,57 +146,77 @@ const getnotes = asyncHandler(async (req, res) => {
 });
 
 const getquestionpapers = asyncHandler(async (req, res) => {
-    const { subject, branch, sem, year } = req.query;
+    try {
+        const { subject, branch, sem, year } = req.query;
+        const query = {}
 
-    const query = {}
+        if(subject) {
+            query.subject = subject;
+        }
+        if(branch) {
+            query.branch = branch;
+        }       
+        if(sem) {
+            query.sem = sem;
+        }
+        if(year) {
+            query.year = year;
+        }
 
-    if(subject) {
-        query.subject = subject;npm 
+        const questionpapers = await QuestionPaper.find(query).sort({ createdAt: -1 });
+        
+        if(!questionpapers || questionpapers.length === 0) {
+            return res
+                .status(404)
+                .json(new ApiResponse(404, [], 'No question papers found matching your criteria'));
+        }
+        
+        return res
+            .status(200)
+            .json(new ApiResponse(200, questionpapers, 'Question papers fetched successfully'));
+    } catch (error) {
+        console.error("Error fetching question papers:", error);
+        throw new ApiError(500, "An error occurred while fetching question papers", error.message);
     }
-    if(branch) {
-        query.branch = branch;
-    }       
-    if(sem) {
-        query.sem = sem;
-    }
-    if(year) {
-        query.year = year;
-    }
-
-    const questionpapers = await QuestionPaper.find(query)
-    if(!questionpapers || questionpapers.length === 0) {
-        throw new ApiError(404, 'No question papers found');
-    }
-    res
-    .status(200)
-    .json(new ApiResponse(200, questionpapers, 'Question papers fetched successfully'));
-
 });
 
 const getNotices = asyncHandler(async (req, res) => {
-    const { sem, branch, targetType } = req.query;
+    try {
+        const { sem, branch, targetType } = req.query;
 
-    // Extract the first two digits of roll number to determine batch year
-    const batchYear = req.student.rollnumber.substring(0, 2);
+        // Extract the first two digits of roll number to determine batch year
+        const batchYear = req.student?.rollnumber?.substring(0, 2);
+        
+        if (!batchYear) {
+            return res
+                .status(400)
+                .json(new ApiResponse(400, null, "Invalid student information"));
+        }
 
-    const query = {
-        batchyear: batchYear, // Match with the batch year of the student
-    };
+        const query = {
+            batchyear: batchYear, // Match with the batch year of the student
+        };
 
-    if (sem) query.sem = sem;
-    if (branch) query.branch = branch;
-    if (targetType) query.targetType = targetType;
+        if (sem) query.sem = sem;
+        if (branch) query.branch = branch;
+        if (targetType) query.targetType = targetType;
 
-    // Fetch notices based on query
-    const notices = await Notice.find(query);
+        // Fetch notices based on query, sort by newest first
+        const notices = await Notice.find(query).sort({ createdAt: -1 });
 
-    if (!notices || notices.length === 0) {
-        throw new ApiError(404, "No notices found for your batch");
+        if (!notices || notices.length === 0) {
+            return res
+                .status(404)
+                .json(new ApiResponse(404, [], "No notices found for your batch"));
+        }
+
+        return res
+            .status(200)
+            .json(new ApiResponse(200, notices, "Notices fetched successfully"));
+    } catch (error) {
+        console.error("Error fetching notices:", error);
+        throw new ApiError(500, "An error occurred while fetching notices", error.message);
     }
-
-    return res
-        .status(200)
-        .json(new ApiResponse(200, notices, "Notices fetched successfully"));
 });
 
 export const showDashboard = asyncHandler(async (req, res) => {

@@ -76,9 +76,61 @@
             background: #fefcbf;
             border-left: 4px solid #ca8a04;
         }
+        /* Error popup styles */
+        .error-popup {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #dc2626;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            max-width: 350px;
+            animation: slideIn 0.4s ease-out forwards;
+        }
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+        .slide-out {
+            animation: slideOut 0.4s ease-in forwards;
+        }
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen py-12">
+    <!-- Error Popup -->
+    <% if (typeof error !== 'undefined' && error) { %>
+    <div id="errorPopup" class="error-popup">
+        <div class="flex justify-between items-start">
+            <div class="flex items-center">
+                <i class="fas fa-exclamation-circle mr-2"></i>
+                <span><%= error %></span>
+            </div>
+            <button onclick="closeErrorPopup()" class="ml-3 text-white">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+    <% } %>
+
     <div class="form-container p-8 w-full max-w-lg mx-4 animate-fade-in">
         <!-- Header -->
         <div class="text-center mb-6">
@@ -280,6 +332,29 @@
             }
         });
 
+        // Error popup handling
+        function closeErrorPopup() {
+            const popup = document.getElementById('errorPopup');
+            if (popup) {
+                popup.classList.add('slide-out');
+                setTimeout(() => {
+                    popup.remove();
+                    // Remove error from URL without page refresh
+                    const url = new URL(window.location);
+                    url.searchParams.delete('error');
+                    window.history.replaceState({}, '', url);
+                }, 400);
+            }
+        }
+
+        // Auto-close error popup after 5 seconds
+        const errorPopup = document.getElementById('errorPopup');
+        if (errorPopup) {
+            setTimeout(() => {
+                closeErrorPopup();
+            }, 5000);
+        }
+
         // Form submission
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -307,8 +382,36 @@
                     // Redirect to login page after 2 seconds
                     setTimeout(() => { window.location.href = '/StudentLogin'; }, 2000);
                 } else {
+                    // Create and show error popup for API errors
+                    const errorMessage = result.error || result.message || 'Registration failed. Please try again.';
+                    
+                    // Create popup element
+                    const popup = document.createElement('div');
+                    popup.id = 'errorPopup';
+                    popup.className = 'error-popup';
+                    popup.innerHTML = `
+                        <div class="flex justify-between items-start">
+                            <div class="flex items-center">
+                                <i class="fas fa-exclamation-circle mr-2"></i>
+                                <span>${errorMessage}</span>
+                            </div>
+                            <button onclick="closeErrorPopup()" class="ml-3 text-white">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    `;
+                    
+                    // Add to body
+                    document.body.appendChild(popup);
+                    
+                    // Auto-close after 5 seconds
+                    setTimeout(() => {
+                        closeErrorPopup();
+                    }, 5000);
+                    
+                    // Also show in form message area
                     formMessage.classList.add('text-red-600');
-                    formMessage.textContent = result.message || 'Registration failed. Please try again.';
+                    formMessage.textContent = errorMessage;
                 }
             } catch (error) {
                 formMessage.classList.add('text-red-600');

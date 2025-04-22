@@ -146,19 +146,19 @@
                         </a>
                     </li>
                     <li class="p-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition">
-                        <a href="/api/v1/students/getnotes" class="flex items-center" aria-label="View notes">
+                        <a href="/notes" class="flex items-center" aria-label="View notes">
                             <i class="fas fa-book w-5" aria-hidden="true"></i>
                             <span class="ml-3">Notes</span>
                         </a>
                     </li>
                     <li class="p-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition">
-                        <a href="/api/v1/students/getquestionpapers" class="flex items-center" aria-label="View question papers">
+                        <a href="/questionpapers" class="flex items-center" aria-label="View question papers">
                             <i class="fas fa-file-alt w-5" aria-hidden="true"></i>
                             <span class="ml-3">Question Papers</span>
                         </a>
                     </li>
                     <li class="p-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition">
-                        <a href="/api/v1/students/getnotices" class="flex items-center" aria-label="View notices">
+                        <a href="/notices" class="flex items-center" aria-label="View notices">
                             <i class="fas fa-bell w-5" aria-hidden="true"></i>
                             <span class="ml-3">Notices</span>
                         </a>
@@ -230,15 +230,15 @@
                         <i class="fas fa-chart-bar text-indigo-600"></i>
                     </div>
                     <div class="grid grid-cols-2 gap-3 md:gap-4">
-                        <div class="bg-blue-50 p-3 md:p-4 rounded-lg text-center hover:bg-blue-100 transition cursor-pointer" onclick="location.href='/api/v1/students/getnotes'">
+                        <div class="bg-blue-50 p-3 md:p-4 rounded-lg text-center hover:bg-blue-100 transition cursor-pointer" onclick="location.href='/notes'">
                             <div class="text-xl md:text-2xl font-bold text-blue-600">12</div>
                             <div class="text-xs md:text-sm text-gray-600">Notes</div>
                         </div>
-                        <div class="bg-purple-50 p-3 md:p-4 rounded-lg text-center hover:bg-purple-100 transition cursor-pointer" onclick="location.href='/api/v1/students/getquestionpapers'">
+                        <div class="bg-purple-50 p-3 md:p-4 rounded-lg text-center hover:bg-purple-100 transition cursor-pointer" onclick="location.href='/questionpapers'">
                             <div class="text-xl md:text-2xl font-bold text-purple-600">8</div>
                             <div class="text-xs md:text-sm text-gray-600">Question Papers</div>
                         </div>
-                        <div class="bg-green-50 p-3 md:p-4 rounded-lg text-center hover:bg-green-100 transition cursor-pointer" onclick="location.href='/api/v1/students/getnotices'">
+                        <div class="bg-green-50 p-3 md:p-4 rounded-lg text-center hover:bg-green-100 transition cursor-pointer" onclick="location.href='/notices'">
                             <div class="text-xl md:text-2xl font-bold text-green-600">5</div>
                             <div class="text-xs md:text-sm text-gray-600">Notices</div>
                         </div>
@@ -256,15 +256,15 @@
                         <i class="fas fa-bolt text-indigo-600"></i>
                     </div>
                     <div class="space-y-3">
-                        <a href="/api/v1/students/getnotes" class="block p-3 bg-gray-100 hover:bg-indigo-100 rounded-lg transition flex items-center" data-loading="true">
+                        <a href="/notes" class="block p-3 bg-gray-100 hover:bg-indigo-100 rounded-lg transition flex items-center" data-loading="true">
                             <i class="fas fa-book-open text-indigo-600 mr-3"></i>
                             <span>View Latest Notes</span>
                         </a>
-                        <a href="/api/v1/students/getquestionpapers" class="block p-3 bg-gray-100 hover:bg-indigo-100 rounded-lg transition flex items-center" data-loading="true">
+                        <a href="/questionpapers" class="block p-3 bg-gray-100 hover:bg-indigo-100 rounded-lg transition flex items-center" data-loading="true">
                             <i class="fas fa-file-alt text-indigo-600 mr-3"></i>
                             <span>Access Question Papers</span>
                         </a>
-                        <a href="/api/v1/students/getnotices" class="block p-3 bg-gray-100 hover:bg-indigo-100 rounded-lg transition flex items-center" data-loading="true">
+                        <a href="/notices" class="block p-3 bg-gray-100 hover:bg-indigo-100 rounded-lg transition flex items-center" data-loading="true">
                             <i class="fas fa-bell text-indigo-600 mr-3"></i>
                             <span>View Important Notices</span>
                         </a>
@@ -276,34 +276,20 @@
             <div class="card p-4 md:p-6 animate-fade-in" style="animation-delay: 0.2s;">
                 <div class="flex items-center justify-between mb-4 md:mb-6">
                     <h2 class="text-lg md:text-xl font-semibold text-gray-800">Recent Updates</h2>
-                    <a href="#" class="text-indigo-600 hover:underline text-sm">View All</a>
+                    <a href="/notices" class="text-indigo-600 hover:underline text-sm">View All</a>
                 </div>
-                <div class="space-y-4">
-                    <div class="border-l-4 border-blue-500 pl-4 py-2 hover:bg-blue-50 rounded-r-lg transition">
-                        <div class="flex justify-between items-start flex-wrap sm:flex-nowrap">
-                            <div class="pr-2">
-                                <h3 class="font-medium">New Study Materials Available</h3>
-                                <p class="text-sm text-gray-600">New notes for Database Management Systems uploaded</p>
-                            </div>
-                            <span class="text-xs text-gray-500 mt-1 sm:mt-0">2 hours ago</span>
+                <div id="recentNotices" class="space-y-4">
+                    <!-- Notices will be loaded dynamically -->
+                    <div class="border-l-4 border-gray-300 pl-4 py-2 rounded-r-lg">
+                        <div class="animate-pulse">
+                            <div class="h-5 bg-gray-200 rounded w-3/4 mb-2"></div>
+                            <div class="h-4 bg-gray-200 rounded w-1/2"></div>
                         </div>
                     </div>
-                    <div class="border-l-4 border-green-500 pl-4 py-2 hover:bg-green-50 rounded-r-lg transition">
-                        <div class="flex justify-between items-start flex-wrap sm:flex-nowrap">
-                            <div class="pr-2">
-                                <h3 class="font-medium">Midterm Examination Schedule</h3>
-                                <p class="text-sm text-gray-600">Midterm exams will be held from Oct 10-15</p>
-                            </div>
-                            <span class="text-xs text-gray-500 mt-1 sm:mt-0">1 day ago</span>
-                        </div>
-                    </div>
-                    <div class="border-l-4 border-yellow-500 pl-4 py-2 hover:bg-yellow-50 rounded-r-lg transition">
-                        <div class="flex justify-between items-start flex-wrap sm:flex-nowrap">
-                            <div class="pr-2">
-                                <h3 class="font-medium">Workshop Announcement</h3>
-                                <p class="text-sm text-gray-600">Web Development workshop this weekend</p>
-                            </div>
-                            <span class="text-xs text-gray-500 mt-1 sm:mt-0">3 days ago</span>
+                    <div class="border-l-4 border-gray-300 pl-4 py-2 rounded-r-lg">
+                        <div class="animate-pulse">
+                            <div class="h-5 bg-gray-200 rounded w-3/4 mb-2"></div>
+                            <div class="h-4 bg-gray-200 rounded w-1/2"></div>
                         </div>
                     </div>
                 </div>
@@ -312,39 +298,126 @@
             <!-- Academic Calendar -->
             <div class="card p-4 md:p-6 mt-4 md:mt-6 animate-fade-in" style="animation-delay: 0.3s;">
                 <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-lg md:text-xl font-semibold text-gray-800">Academic Calendar</h2>
+                    <h2 class="text-lg md:text-xl font-semibold text-gray-800">Academic Calendar 2024-25</h2>
                     <div class="text-xs py-1 px-2 bg-indigo-100 text-indigo-700 rounded-full">
-                        <%= new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) %>
+                        B.Tech I & II Semesters
                     </div>
                 </div>
-                <div class="space-y-3">
-                    <div class="flex items-center p-2 rounded-lg hover:bg-gray-50">
-                        <div class="flex-shrink-0 w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mr-4">
-                            <span class="text-red-600 font-semibold">15</span>
-                        </div>
-                        <div>
-                            <h3 class="font-medium">Mid-term Examination</h3>
-                            <p class="text-sm text-gray-600">October 15-25, 2023</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center p-2 rounded-lg hover:bg-gray-50">
-                        <div class="flex-shrink-0 w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
-                            <span class="text-green-600 font-semibold">30</span>
-                        </div>
-                        <div>
-                            <h3 class="font-medium">Project Submission</h3>
-                            <p class="text-sm text-gray-600">October 30, 2023</p>
-                        </div>
-                    </div>
+                
+                <!-- Calendar tabs -->
+                <div class="flex border-b mb-4">
+                    <button id="sem1Tab" class="px-4 py-2 text-indigo-600 border-b-2 border-indigo-600 font-medium">I Semester</button>
+                    <button id="sem2Tab" class="px-4 py-2 text-gray-500 hover:text-indigo-600">II Semester</button>
+                </div>
+                
+                <!-- Semester I Calendar -->
+                <div id="sem1Calendar" class="space-y-3">
                     <div class="flex items-center p-2 rounded-lg hover:bg-gray-50">
                         <div class="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
-                            <span class="text-blue-600 font-semibold">5</span>
+                            <span class="text-blue-600 font-semibold">19</span>
                         </div>
                         <div>
-                            <h3 class="font-medium">Technical Symposium</h3>
-                            <p class="text-sm text-gray-600">November 5-6, 2023</p>
+                            <h3 class="font-medium">Induction Program</h3>
+                            <p class="text-sm text-gray-600">19.08.2024 - 24.09.2024 (1 Week)</p>
                         </div>
                     </div>
+                    
+                    <div class="flex items-center p-2 rounded-lg hover:bg-gray-50">
+                        <div class="flex-shrink-0 w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
+                            <span class="text-green-600 font-semibold">27</span>
+                        </div>
+                        <div>
+                            <h3 class="font-medium">1<sup>st</sup> Spell of Instructions</h3>
+                            <p class="text-sm text-gray-600">27.08.2024 - 30.10.2024 (10 Weeks)</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center p-2 rounded-lg hover:bg-gray-50">
+                        <div class="flex-shrink-0 w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mr-4">
+                            <span class="text-yellow-600 font-semibold">7</span>
+                        </div>
+                        <div>
+                            <h3 class="font-medium">Dussehra Recess</h3>
+                            <p class="text-sm text-gray-600">07.10.2024 - 12.10.2024 (1 Week)</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center p-2 rounded-lg hover:bg-gray-50">
+                        <div class="flex-shrink-0 w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mr-4">
+                            <span class="text-red-600 font-semibold">1</span>
+                        </div>
+                        <div>
+                            <h3 class="font-medium">First Mid Term Examinations</h3>
+                            <p class="text-sm text-gray-600">01.11.2024 - 06.11.2024 (1 Week)</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center p-2 rounded-lg hover:bg-gray-50">
+                        <div class="flex-shrink-0 w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mr-4">
+                            <span class="text-purple-600 font-semibold">31</span>
+                        </div>
+                        <div>
+                            <h3 class="font-medium">End Semester Examinations</h3>
+                            <p class="text-sm text-gray-600">31.01.2025 - 12.02.2025 (2 Weeks)</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Semester II Calendar (hidden by default) -->
+                <div id="sem2Calendar" class="space-y-3 hidden">
+                    <div class="flex items-center p-2 rounded-lg hover:bg-gray-50">
+                        <div class="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+                            <span class="text-blue-600 font-semibold">13</span>
+                        </div>
+                        <div>
+                            <h3 class="font-medium">Commencement of II Semester</h3>
+                            <p class="text-sm text-gray-600">13.02.2025</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center p-2 rounded-lg hover:bg-gray-50">
+                        <div class="flex-shrink-0 w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
+                            <span class="text-green-600 font-semibold">13</span>
+                        </div>
+                        <div>
+                            <h3 class="font-medium">1<sup>st</sup> Spell of Instructions</h3>
+                            <p class="text-sm text-gray-600">13.02.2025 - 11.04.2025 (8 Weeks)</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center p-2 rounded-lg hover:bg-gray-50">
+                        <div class="flex-shrink-0 w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mr-4">
+                            <span class="text-yellow-600 font-semibold">15</span>
+                        </div>
+                        <div>
+                            <h3 class="font-medium">First Mid Term Examinations</h3>
+                            <p class="text-sm text-gray-600">15.04.2025 - 21.04.2025 (1 Week)</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center p-2 rounded-lg hover:bg-gray-50">
+                        <div class="flex-shrink-0 w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mr-4">
+                            <span class="text-red-600 font-semibold">1</span>
+                        </div>
+                        <div>
+                            <h3 class="font-medium">Second Mid Term Examinations</h3>
+                            <p class="text-sm text-gray-600">01.07.2025 - 05.07.2025 (1 Week)</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center p-2 rounded-lg hover:bg-gray-50">
+                        <div class="flex-shrink-0 w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mr-4">
+                            <span class="text-purple-600 font-semibold">14</span>
+                        </div>
+                        <div>
+                            <h3 class="font-medium">End Semester Examinations</h3>
+                            <p class="text-sm text-gray-600">14.07.2025 - 26.07.2025 (2 Weeks)</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-right mt-4">
+                    <a href="#" class="text-sm text-indigo-600 hover:underline">View Full Calendar</a>
                 </div>
             </div>
 
@@ -388,6 +461,9 @@
                 });
             });
 
+            // Fetch recent notices
+            fetchRecentNotices();
+
             // Logout confirmation
             const logoutForm = document.getElementById('logoutForm');
             logoutForm.addEventListener('submit', function(e) {
@@ -424,6 +500,199 @@
                     document.body.classList.remove('overflow-hidden');
                 }
             });
+
+            // Function to fetch recent notices
+            async function fetchRecentNotices(retryCount = 0) {
+                try {
+                    const noticesContainer = document.getElementById('recentNotices');
+                    // Show loading state
+                    if (retryCount === 0) {
+                        noticesContainer.innerHTML = `
+                            <div class="text-center py-4">
+                                <div class="inline-block w-6 h-6 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+                                <p class="text-sm text-gray-500 mt-2">Loading notices...</p>
+                            </div>
+                        `;
+                    }
+                    
+                    const response = await fetch('/api/v1/students/getnotices', {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        credentials: 'include' // Important for sending cookies
+                    });
+                    
+                    // Check if we got redirected to login page (session expired)
+                    if (response.redirected) {
+                        window.location.href = response.url;
+                        return;
+                    }
+                    
+                    if (!response.ok) {
+                        const errorData = await response.json().catch(() => ({}));
+                        throw new Error(errorData.error || 'Failed to fetch notices');
+                    }
+                    
+                    const data = await response.json();
+                    const notices = data.data || [];
+                    
+                    // Display the most recent 3 notices
+                    displayRecentNotices(notices.slice(0, 3));
+                } catch (error) {
+                    console.error('Error fetching notices:', error);
+                    
+                    // Retry up to 2 times with exponential backoff
+                    if (retryCount < 2) {
+                        console.log(`Retrying notices fetch (${retryCount + 1}/2) in ${(retryCount + 1) * 1000}ms`);
+                        setTimeout(() => {
+                            fetchRecentNotices(retryCount + 1);
+                        }, (retryCount + 1) * 1000);
+                    } else {
+                        displayErrorNotice(error.message);
+                    }
+                }
+            }
+            
+            // Function to display notices in the Recent Updates section
+            function displayRecentNotices(notices) {
+                const noticesContainer = document.getElementById('recentNotices');
+                noticesContainer.innerHTML = '';
+                
+                if (notices.length === 0) {
+                    noticesContainer.innerHTML = `
+                        <div class="border-l-4 border-gray-400 pl-4 py-2 rounded-r-lg">
+                            <div class="text-center">
+                                <p class="text-gray-500">No recent notices available</p>
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                const borderColors = ['blue-500', 'green-500', 'yellow-500', 'purple-500', 'red-500'];
+                
+                notices.forEach((notice, index) => {
+                    const colorClass = borderColors[index % borderColors.length];
+                    const timeAgo = getTimeAgo(new Date(notice.createdAt));
+                    
+                    const noticeElement = document.createElement('div');
+                    noticeElement.className = `border-l-4 border-${colorClass} pl-4 py-2 hover:bg-${colorClass.replace('500', '50')} rounded-r-lg transition`;
+                    noticeElement.innerHTML = `
+                        <div class="flex justify-between items-start flex-wrap sm:flex-nowrap">
+                            <div class="pr-2">
+                                <h3 class="font-medium">${notice.title}</h3>
+                                <p class="text-sm text-gray-600">${truncateText(notice.description, 100)}</p>
+                            </div>
+                            <span class="text-xs text-gray-500 mt-1 sm:mt-0">${timeAgo}</span>
+                        </div>
+                    `;
+                    
+                    noticesContainer.appendChild(noticeElement);
+                });
+            }
+            
+            // Function to display error message when notices can't be fetched
+            function displayErrorNotice(message) {
+                const noticesContainer = document.getElementById('recentNotices');
+                noticesContainer.innerHTML = `
+                    <div class="border-l-4 border-red-500 pl-4 py-2 rounded-r-lg">
+                        <div class="text-center">
+                            <p class="text-red-500">${message || 'Couldn\'t load notices. Please try again later.'}</p>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Helper function to truncate text to a specific length
+            function truncateText(text, maxLength) {
+                if (text.length <= maxLength) return text;
+                return text.substr(0, maxLength) + '...';
+            }
+            
+            // Helper function to format time ago
+            function getTimeAgo(date) {
+                const seconds = Math.floor((new Date() - date) / 1000);
+                
+                let interval = Math.floor(seconds / 31536000);
+                if (interval >= 1) {
+                    return interval === 1 ? '1 year ago' : `${interval} years ago`;
+                }
+                
+                interval = Math.floor(seconds / 2592000);
+                if (interval >= 1) {
+                    return interval === 1 ? '1 month ago' : `${interval} months ago`;
+                }
+                
+                interval = Math.floor(seconds / 86400);
+                if (interval >= 1) {
+                    return interval === 1 ? '1 day ago' : `${interval} days ago`;
+                }
+                
+                interval = Math.floor(seconds / 3600);
+                if (interval >= 1) {
+                    return interval === 1 ? '1 hour ago' : `${interval} hours ago`;
+                }
+                
+                interval = Math.floor(seconds / 60);
+                if (interval >= 1) {
+                    return interval === 1 ? '1 minute ago' : `${interval} minutes ago`;
+                }
+                
+                return 'Just now';
+            }
+
+            // Handle Academic Calendar tabs
+            const sem1Tab = document.getElementById('sem1Tab');
+            const sem2Tab = document.getElementById('sem2Tab');
+            const sem1Calendar = document.getElementById('sem1Calendar');
+            const sem2Calendar = document.getElementById('sem2Calendar');
+            
+            // Function to switch between semesters
+            function switchSemesterTab(activeSem) {
+                // First, remove all active states
+                [sem1Tab, sem2Tab].forEach(tab => {
+                    tab.classList.remove('text-indigo-600', 'border-b-2', 'border-indigo-600');
+                    tab.classList.add('text-gray-500');
+                });
+                
+                // Hide all calendar displays
+                [sem1Calendar, sem2Calendar].forEach(cal => {
+                    cal.classList.add('hidden');
+                });
+                
+                // Set active states based on selection
+                if (activeSem === 1) {
+                    sem1Calendar.classList.remove('hidden');
+                    sem1Tab.classList.add('text-indigo-600', 'border-b-2', 'border-indigo-600');
+                    sem1Tab.classList.remove('text-gray-500');
+                    // Store preference in local storage
+                    localStorage.setItem('preferredSemester', '1');
+                } else {
+                    sem2Calendar.classList.remove('hidden');
+                    sem2Tab.classList.add('text-indigo-600', 'border-b-2', 'border-indigo-600');
+                    sem2Tab.classList.remove('text-gray-500');
+                    // Store preference in local storage
+                    localStorage.setItem('preferredSemester', '2');
+                }
+            }
+            
+            // Set click handlers
+            sem1Tab.addEventListener('click', () => switchSemesterTab(1));
+            sem2Tab.addEventListener('click', () => switchSemesterTab(2));
+            
+            // Check local storage for preferred semester
+            const currentMonth = new Date().getMonth() + 1; // 1-12
+            const preferredSem = localStorage.getItem('preferredSemester');
+            
+            // Auto-select semester based on current date or user preference
+            if (preferredSem) {
+                switchSemesterTab(parseInt(preferredSem));
+            } else {
+                // If current month is August-December, show Sem I, otherwise show Sem II
+                switchSemesterTab(currentMonth >= 8 ? 1 : 2);
+            }
 
             console.log('Dashboard loaded successfully');
         });
