@@ -10,10 +10,35 @@ import questionPaperRoutes from "./src/routes/questionpaper.route.js";
 import { verifyStudent } from "./src/middlewares/auth.js";
 import { errorMiddleware } from "./src/middlewares/error.middleware.js";
 import morgan from "morgan";
+import rateLimit from 'express-rate-limit';
 
 const app = express();
 import path from "path";
 import { fileURLToPath } from "url";
+
+// Rate limiting for sensitive routes
+const loginRateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10, // Limit each IP to 10 login attempts per window
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  message: {
+    status: 'fail',
+    message: 'Too many login attempts, please try again after 15 minutes',
+  }
+});
+
+// General API rate limiter
+const apiLimiter = rateLimit({
+  windowMs: 10 * 60 * 1000, // 10 minutes
+  max: 100, // Limit each IP to 100 requests per window
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    status: 'fail',
+    message: 'Too many requests from this IP, please try again after 10 minutes',
+  }
+});
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -41,6 +66,28 @@ app.use((req, res, next) => {
 // Set security HTTP headers
 app.use((req, res, next) => {
   res.setHeader("X-XSS-Protection", "1; mode=block");
+  next();
+});
+
+// Set security HTTP headers
+app.use((req, res, next) => {
+  // Protect against XSS attacks
+  res.setHeader("X-XSS-Protection", "1; mode=block");
+  
+  // Prevent clickjacking
+  res.setHeader("X-Frame-Options", "SAMEORIGIN");
+  
+  // Disable MIME type sniffing
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  
+  // Strict Transport Security (in production)
+  if (process.env.NODE_ENV === 'production') {
+    res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+  }
+  
+  // Referrer policy
+  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+
   next();
 });
 
@@ -90,6 +137,15 @@ app.use(express.urlencoded({ extended: true, limit: "10kb" }));
 
 // Cookie parser
 app.use(cookieParser());
+
+// Apply general API rate limiter to all API routes
+app.use("/api/v1", apiLimiter);
+
+// Apply login/register specific rate limiter to sensitive routes
+app.use("/api/v1/students/login", loginRateLimiter);
+app.use("/api/v1/students/register", loginRateLimiter);
+app.use("/api/v1/faculty/login", loginRateLimiter);
+app.use("/api/v1/faculty/register", loginRateLimiter);
 
 // Health check route for Render
 app.get("/health", (req, res) => {
