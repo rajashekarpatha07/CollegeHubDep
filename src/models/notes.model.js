@@ -24,9 +24,20 @@ const notesSchema = new Schema({
       type: String,
       required: true,
       validate: {
-        validator: url => /^https?:\/\/.+/.test(url),
-        message: 'Invalid file URL'
+        validator: function(url) {
+          // Accept both ImageKit URLs (https://ik.imagekit.io) and local paths (/uploads/...)
+          return url && (url.startsWith('http') || url.startsWith('/uploads/'));
+        },
+        message: 'Invalid file URL - must be a valid HTTP URL or local path'
       }
+    },
+    fileId: {
+      type: String,
+      // Not required as legacy records might not have it
+    },
+    isLocalStorage: {
+      type: Boolean,
+      default: false
     },
     uploadedBy: {
       type: String,

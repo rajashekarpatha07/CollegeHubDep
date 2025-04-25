@@ -34,7 +34,7 @@ const storage = multer.diskStorage({
 });
 
 // File filter for only images and PDFs
-const upload = multer({
+const multerUpload = multer({
     storage,
     limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
     fileFilter: function (req, file, cb) {
@@ -49,6 +49,51 @@ const upload = multer({
     { name: "questionpaper", maxCount: 1 }
 ]);
 
+// Wrapper around multer upload that handles errors and cleanup
+const upload = (req, res, next) => {
+    multerUpload(req, res, function(err) {
+        if (err) {
+            console.error("Multer upload error:", err);
+            return res.status(400).json({
+                status: "fail",
+                message: err.message || "File upload failed"
+            });
+        }
+        
+        // Store uploaded file paths in request for possible cleanup later
+        req.uploadedFiles = [];
+        
+        // Check if files were uploaded and add them to uploadedFiles array
+        if (req.files) {
+            Object.values(req.files).forEach(fileArray => {
+                fileArray.forEach(file => {
+                    req.uploadedFiles.push(file.path);
+                });
+            });
+        }
+        
+        next();
+    });
+};
+
+// Middleware to clean up files if there's an error
+const cleanupOnError = (err, req, res, next) => {
+    if (err && req.uploadedFiles && req.uploadedFiles.length > 0) {
+        console.log("Cleaning up temporary files due to error");
+        req.uploadedFiles.forEach(filePath => {
+            if (fs.existsSync(filePath)) {
+                try {
+                    fs.unlinkSync(filePath);
+                    console.log(`Cleaned up temp file: ${filePath}`);
+                } catch (unlinkError) {
+                    console.error(`Failed to clean up temp file: ${filePath}`, unlinkError);
+                }
+            }
+        });
+    }
+    next(err);
+};
+
 const compressAndSaveImage = async (localFilePath) => {
     const compressedFilePath = localFilePath.replace(path.extname(localFilePath), "-compressed.jpg");
     try {
@@ -58,7 +103,13 @@ const compressAndSaveImage = async (localFilePath) => {
             .toFile(compressedFilePath);
 
         // Delete original uncompressed file
-        fs.unlinkSync(localFilePath);
+        try {
+            fs.unlinkSync(localFilePath);
+            console.log(`Deleted original file after compression: ${localFilePath}`);
+        } catch (error) {
+            console.error(`Failed to delete original file after compression: ${localFilePath}`, error);
+        }
+        
         return compressedFilePath;
     } catch (error) {
         console.error("Error compressing image:", error);
@@ -79,7 +130,12 @@ const compressAndSavePDF = (localFilePath) => {
             .pipe(writeStream)
             .on("finish", () => {
                 // Delete original uncompressed file
-                fs.unlinkSync(localFilePath);
+                try {
+                    fs.unlinkSync(localFilePath);
+                    console.log(`Deleted original PDF after compression: ${localFilePath}`);
+                } catch (error) {
+                    console.error(`Failed to delete original PDF after compression: ${localFilePath}`, error);
+                }
                 resolve(compressedFilePath);
             })
             .on("error", (error) => {
@@ -99,4 +155,4 @@ const compressAndSaveFile = async (localFilePath, mimetype) => {
     return localFilePath;
 };
 
-export { upload, compressAndSaveFile };
+export { upload, compressAndSaveFile, cleanupOnError };

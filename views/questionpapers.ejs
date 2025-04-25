@@ -576,9 +576,22 @@
             modalInfo.textContent = `${paper.branch} - Semester ${paper.sem} - ${paper.year}`;
             modalUploader.textContent = paper.uploadedBy;
             
-            // Set PDF viewer URL
-            pdfViewer.src = paper.fileUrl;
-            downloadButton.href = paper.fileUrl;
+            // For viewing, we'll use direct URL
+            const directUrl = paper.fileUrl;
+            
+            // Try multiple viewer options by combining several approaches:
+            
+            // 1. First choice: PDF.js web viewer (best option)
+            const pdfJsViewerUrl = `https://mozilla.github.io/pdf.js/web/viewer.html?file=${encodeURIComponent(directUrl)}`;
+            
+            // 2. Second choice: Google Docs viewer (fallback)
+            // const googleDocsViewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(directUrl)}&embedded=true`;
+            
+            // Use PDF.js viewer
+            pdfViewer.src = pdfJsViewerUrl;
+            
+            // The download button uses the direct URL
+            downloadButton.href = directUrl;
             
             paperModal.classList.remove('hidden');
         }

@@ -132,6 +132,22 @@ Make sure to set the following environment variables in Vercel:
 - `EMAIL_PASS` - Email password
 - `SENDINBLUE_API_KEY` - SendInBlue API key (if using)
 
+## File Storage
+
+The College Hub application uses ImageKit.io as the primary file storage solution for notes, question papers, and other documents. If ImageKit is unavailable, the application will automatically fall back to local storage in the `public/uploads/` directory.
+
+### Configuration
+
+Make sure to configure ImageKit credentials in your `.env` file:
+
+```
+IMAGEKIT_PUBLIC_KEY=your_public_key
+IMAGEKIT_PRIVATE_KEY=your_private_key
+IMAGEKIT_URL_ENDPOINT=https://ik.imagekit.io/your_account
+```
+
+See `IMAGEKIT_MIGRATION.md` for more information about the file storage implementation.
+
 ## License
 
 ISC

@@ -9,8 +9,12 @@ import noticesRoutes from "./src/routes/notices.route.js";
 import questionPaperRoutes from "./src/routes/questionpaper.route.js";
 import { verifyStudent } from "./src/middlewares/auth.js";
 import { errorMiddleware } from "./src/middlewares/error.middleware.js";
+import { cleanupOnError } from "./src/middlewares/multer.middleware.js";
 import morgan from "morgan";
 import rateLimit from 'express-rate-limit';
+
+// Set UploadThing API key - make sure to use the raw key, not the encoded version
+process.env.UPLOADTHING_TOKEN = 'sk_live_78ff44f7c2f2d20e1fc13b7d4271e3dc4252d325812ee020bdd9c8c603fe44ef';
 
 const app = express();
 import path from "path";
@@ -200,12 +204,18 @@ app.get("/questionpapers", verifyStudent, (req, res) => {
     res.render("questionpapers", { student: req.student });
 });
 
+// PDF test page route (development only)
+app.get("/test-pdf", (req, res) => {
+    res.render("test-pdf");
+});
+
 // API routes
 app.use("/api/v1/students", studentRoutes);
 app.use("/api/v1/faculty", facultyRoutes);   
 app.use("/api/v1/notes", notesRoutes);
 app.use("/api/v1/notices", noticesRoutes);
 app.use("/api/v1/questionpaper", questionPaperRoutes);
+
 
 // Handle undefined Routes
 app.use("*", (req, res, next) => {
@@ -259,8 +269,14 @@ app.use("*", (req, res, next) => {
   });
 });
 
+// Add cleanup middleware before the global error handler
+app.use(cleanupOnError);
+
 // Global error handler
 app.use(errorMiddleware);
+
+// Set up static file serving for uploads
+app.use('/tmp/uploads', express.static(path.join(__dirname, 'tmp', 'uploads')));
 
 export default app;
 

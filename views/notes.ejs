@@ -506,9 +506,22 @@
             modalUploader.textContent = note.uploadedBy;
             modalDescription.textContent = note.description;
             
-            // Set PDF viewer URL
-            pdfViewer.src = note.fileUrl;
-            downloadButton.href = note.fileUrl;
+            // For viewing, we'll use direct URL
+            const directUrl = note.fileUrl;
+            
+            // Try multiple viewer options by combining several approaches:
+            
+            // 1. First choice: PDF.js web viewer (best option)
+            const pdfJsViewerUrl = `https://mozilla.github.io/pdf.js/web/viewer.html?file=${encodeURIComponent(directUrl)}`;
+            
+            // 2. Second choice: Google Docs viewer (fallback)
+            // const googleDocsViewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(directUrl)}&embedded=true`;
+            
+            // Use PDF.js viewer
+            pdfViewer.src = pdfJsViewerUrl;
+            
+            // The download button uses the direct URL
+            downloadButton.href = directUrl;
             
             noteModal.classList.remove('hidden');
         }

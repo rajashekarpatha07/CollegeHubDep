@@ -1,40 +1,86 @@
 import { ApiError } from '../utils/ApiError.js';
 import { QuestionPaper } from '../models/questionpaper.model.js';
-import { UploadOnCloudinary, DeleteFromCloudinary } from '../utils/Cloudinary.js';
+import { storeFile, deleteFile } from '../utils/FileStorage.js';
 import { asyncHandler } from '../utils/AsyncHanders.js';
 import { ApiResponse } from '../utils/ApiResponse.js';
+import fs from 'fs';
 
+/**
+ * Utility function to clean up temporary files
+ */
+const cleanupTempFile = (filePath) => {
+    if (filePath && fs.existsSync(filePath)) {
+        try {
+            fs.unlinkSync(filePath);
+            console.log(`✅ Manually cleaned up temp file: ${filePath}`);
+        } catch (error) {
+            console.error(`Failed to manually clean up temp file: ${filePath}`, error);
+        }
+    }
+};
 
 const addQuestionPaper = asyncHandler(async (req, res) => {
+    const questionpaperpath = req.files?.questionpaper?.[0]?.path;
+    
     try {
         const { subject, year, branch, sem } = req.body;
         
-        const questionpaperpath = req.files?.questionpaper?.[0]?.path;
+        // Validate required fields
+        if (!subject || !year || !branch || !sem) {
+            if (questionpaperpath) cleanupTempFile(questionpaperpath);
+            return res.status(400).json(
+                new ApiResponse(400, null, "All required fields must be provided")
+            );
+        }
         
         if (!questionpaperpath) {
-            throw new ApiError(400, "File not provided");
+            return res.status(400).json(
+                new ApiResponse(400, null, "Question paper file is required")
+            );
         }
         
-        const questionpaperurl = await UploadOnCloudinary(questionpaperpath);
+        console.log("Attempting to upload file:", questionpaperpath);
         
-        if (!questionpaperurl) {
-            throw new ApiError(500, "File upload failed");
+        // Upload file using our utility (ImageKit with local fallback)
+        const fileUploadResult = await storeFile(questionpaperpath, "questionpapers");
+        
+        if (!fileUploadResult || !fileUploadResult.url) {
+            // The storeFile function should handle cleanup, but let's double-check
+            if (fs.existsSync(questionpaperpath)) cleanupTempFile(questionpaperpath);
+            
+            return res.status(500).json(
+                new ApiResponse(500, null, "File upload failed")
+            );
         }
+
+        console.log("Uploaded file details:", {
+            url: fileUploadResult.url,
+            isLocalStorage: fileUploadResult.isLocalStorage
+        });
 
         const newQuestionPaper = await QuestionPaper.create({
             subject,
             year,
             branch,
-            sem,
-            fileUrl: questionpaperurl.secure_url,
+            sem: parseInt(sem, 10), // Ensure it's stored as a number
+            fileUrl: fileUploadResult.url,
+            fileId: fileUploadResult.fileId,
+            isLocalStorage: fileUploadResult.isLocalStorage,
             uploadedBy: req.faculty.name,
         });
 
         return res
-        .status(201)
-        .json(new ApiResponse(201, newQuestionPaper, "Question Paper added successfully"));
+            .status(201)
+            .json(new ApiResponse(201, newQuestionPaper, "Question Paper added successfully"));
     } catch (error) {
-        return res.status(500).json(new ApiResponse(500, null, "Internal Server Error", error.message));
+        console.error("Error adding question paper:", error);
+        
+        // Clean up the temporary file if it exists
+        if (questionpaperpath) cleanupTempFile(questionpaperpath);
+        
+        return res.status(500).json(
+            new ApiResponse(500, null, "Internal Server Error: " + error.message)
+        );
     }
 });
 
@@ -42,25 +88,52 @@ const deleteQuestionPaper = asyncHandler(async (req, res) => {
     try {
         const { id } = req.params;
 
+        if (!id) {
+            return res.status(400).json(
+                new ApiResponse(400, null, "Question Paper ID is required")
+            );
+        }
+
         const questionPaper = await QuestionPaper.findById(id);
         if (!questionPaper) {
-            return res.status(404).json(new ApiResponse(404, null, "Question Paper not found"));
+            return res.status(404).json(
+                new ApiResponse(404, null, "Question Paper not found")
+            );
         }
 
-        const cloudinaryResponse = await DeleteFromCloudinary(questionPaper.fileUrl);
-        if (!cloudinaryResponse) {
-           return new ApiError(500, "File deletion failed", {
-            fileUrl: questionPaper.fileUrl,
-           });
+        console.log("Attempting to delete file:", {
+            url: questionPaper.fileUrl,
+            fileId: questionPaper.fileId,
+            isLocalStorage: questionPaper.isLocalStorage
+        });
+        
+        // Only attempt to delete the file if fileUrl exists
+        if (questionPaper.fileUrl) {
+            const deleteResult = await deleteFile(
+                questionPaper.fileUrl, 
+                questionPaper.fileId, 
+                questionPaper.isLocalStorage
+            );
+            
+            if (!deleteResult) {
+                console.warn(`Warning: Failed to delete file: ${questionPaper.fileUrl}`);
+                // Continue with question paper deletion even if file deletion fails
+            } else {
+                console.log("File deleted successfully");
+            }
         }
 
+        // Delete the question paper from the database
         await QuestionPaper.findByIdAndDelete(id);
 
-        return res.status(200).json(new ApiResponse(200, {deletedId: id}, "Question Paper deleted successfully"));
-        
-
+        return res
+            .status(200)
+            .json(new ApiResponse(200, { deletedId: id }, "Question Paper deleted successfully"));
     } catch (error) {
-        throw new ApiError(500, "Internal Server Error", error.message);
+        console.error("Error deleting question paper:", error);
+        return res.status(500).json(
+            new ApiResponse(500, null, "Internal Server Error: " + error.message)
+        );
     }
 });
 
