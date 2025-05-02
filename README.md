@@ -58,31 +58,31 @@ If you're developing the frontend for this application:
 Check the ***commit history*** to stay informed about ongoing enhancements and progress.  
 Stay tuned for exciting new features! 🎉
 
-## Vercel Deployment Guide
+## Render Deployment Guide
 
 ### Prerequisites
 
-1. Create a [Vercel](https://vercel.com/) account
-2. Install [Vercel CLI](https://vercel.com/docs/cli) (optional for local deployment)
+1. Create a [Vercel](https://render/) account
+2. Install [Vercel CLI](https://render.com/docs/cli) (optional for local deployment)
 
 ### Steps to Deploy
 
 1. **Login to Vercel**
    ```bash
-   vercel login
+   render login
    ```
 
 2. **Deploy**
    ```bash
-   vercel
+   render
    ```
 
 3. **Set Environment Variables**
-   - Go to Vercel Dashboard > Your Project > Settings > Environment Variables
+   - Go to render Dashboard > Your Project > Settings > Environment Variables
    - Add all the variables from your `.env` file
 
 4. **Serverless Functions**
-   This project is configured as a serverless application for Vercel through the `vercel.json` configuration file.
+   This project is configured as a serverless application for Vercel through the `render.json` configuration file.
 
 ### Database Setup
 
@@ -100,7 +100,7 @@ For MongoDB, you have a few options:
 
 1. Clone the repository
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/rajashekarpatha07/Collage-Hub.git
    ```
 
 2. Install dependencies
@@ -147,7 +147,3 @@ IMAGEKIT_URL_ENDPOINT=https://ik.imagekit.io/your_account
 ```
 
 See `IMAGEKIT_MIGRATION.md` for more information about the file storage implementation.
-
-## License
-
-ISC
