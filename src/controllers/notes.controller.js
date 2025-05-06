@@ -92,6 +92,11 @@ const addNote = asyncHandler(async (req, res) => {
             uploadedBy: req.faculty.name,
         });
 
+        // Check if the request is from a browser or API
+        if (req.headers['accept'] && req.headers['accept'].includes('text/html')) {
+            return res.redirect('/upload-notes?success=Note uploaded successfully');
+        }
+
         return res.status(201).json(new ApiResponse(201, note, "Note added successfully"));
     } catch (error) {
         console.error("Error adding note:", error);
@@ -140,6 +145,11 @@ const deleteNotes = asyncHandler(async (req, res) => {
         // Delete the note from the database
         await Notes.deleteOne({ _id: id });
 
+        // Check if the request is from a browser or API
+        if (req.headers['accept'] && req.headers['accept'].includes('text/html')) {
+            return res.redirect('/manage-notes?success=Note deleted successfully');
+        }
+
         return res
             .status(200)
             .json(new ApiResponse(200, { deletedId: id }, "Note deleted successfully"));
@@ -151,4 +161,38 @@ const deleteNotes = asyncHandler(async (req, res) => {
     }
 });
 
-export { addNote, deleteNotes };
+const getAllNotes = asyncHandler(async (req, res) => {
+    try {
+        const notes = await Notes.find().sort({ createdAt: -1 });
+        
+        // Check if request is from web browser or API client
+        if (req.headers['accept'] && req.headers['accept'].includes('text/html')) {
+            return res.render('manage-notes', {
+                faculty: req.faculty,
+                notes: notes,
+                success: req.query.success || null,
+                error: req.query.error || null
+            });
+        }
+        
+        return res.status(200).json(
+            new ApiResponse(200, notes, "Notes fetched successfully")
+        );
+    } catch (error) {
+        console.error("Error fetching notes:", error);
+        
+        if (req.headers['accept'] && req.headers['accept'].includes('text/html')) {
+            return res.render('manage-notes', {
+                faculty: req.faculty,
+                notes: [],
+                error: "Failed to fetch notes: " + error.message
+            });
+        }
+        
+        return res.status(500).json(
+            new ApiResponse(500, null, "Failed to fetch notes: " + error.message)
+        );
+    }
+});
+
+export { addNote, deleteNotes, getAllNotes };

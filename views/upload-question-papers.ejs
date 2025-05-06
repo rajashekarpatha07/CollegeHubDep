@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Question Papers - College Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .sidebar {
+            background: linear-gradient(to bottom, #134e4a, #0f766e);
+        }
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .required-star {
+            color: #ef4444;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <aside class="sidebar text-white w-64 flex-shrink-0 hidden md:block">
+            <div class="p-6">
+                <h1 class="text-2xl font-bold mb-1">College Hub</h1>
+                <p class="text-sm opacity-75">Faculty Portal</p>
+            </div>
+            <nav class="mt-6">
+                <a href="/faculty-dashboard" class="flex items-center px-6 py-3 hover:bg-teal-700 hover:bg-opacity-50 transition">
+                    <i class="fas fa-tachometer-alt mr-3"></i>
+                    Dashboard
+                </a>
+                <a href="/upload-notes" class="flex items-center px-6 py-3 hover:bg-teal-700 hover:bg-opacity-50 transition">
+                    <i class="fas fa-book mr-3"></i>
+                    Upload Notes
+                </a>
+                <a href="/manage-notes" class="flex items-center px-6 py-3 hover:bg-teal-700 hover:bg-opacity-50 transition">
+                    <i class="fas fa-list mr-3"></i>
+                    Manage Notes
+                </a>
+                <a href="/upload-question-papers" class="flex items-center px-6 py-3 bg-teal-700 bg-opacity-50">
+                    <i class="fas fa-file-alt mr-3"></i>
+                    Upload Question Papers
+                </a>
+                <a href="/manage-question-papers" class="flex items-center px-6 py-3 hover:bg-teal-700 hover:bg-opacity-50 transition">
+                    <i class="fas fa-list-alt mr-3"></i>
+                    Manage Question Papers
+                </a>
+                <a href="#" class="flex items-center px-6 py-3 hover:bg-teal-700 hover:bg-opacity-50 transition">
+                    <i class="fas fa-bullhorn mr-3"></i>
+                    Post Notices
+                </a>
+                <form action="/api/v1/faculty/logout" method="POST" class="mt-auto px-6 py-3">
+                    <button type="submit" class="flex items-center text-white hover:text-red-200 transition">
+                        <i class="fas fa-sign-out-alt mr-3"></i>
+                        Logout
+                    </button>
+                </form>
+            </nav>
+        </aside>
+
+        <!-- Mobile header -->
+        <div class="md:hidden bg-teal-600 text-white p-4 w-full fixed top-0 z-10 flex justify-between items-center">
+            <h1 class="text-xl font-bold">College Hub</h1>
+            <button id="mobileMenuToggle" class="text-white">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Mobile menu -->
+        <div id="mobileMenu" class="md:hidden fixed inset-0 bg-gray-900 bg-opacity-50 z-20 hidden">
+            <div class="bg-teal-600 text-white h-full w-64 p-4">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold">Menu</h2>
+                    <button id="mobileMenuClose" class="text-white">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <nav class="flex flex-col space-y-4">
+                    <a href="/faculty-dashboard" class="flex items-center py-2">
+                        <i class="fas fa-tachometer-alt mr-3"></i>
+                        Dashboard
+                    </a>
+                    <a href="/upload-notes" class="flex items-center py-2">
+                        <i class="fas fa-book mr-3"></i>
+                        Upload Notes
+                    </a>
+                    <a href="/manage-notes" class="flex items-center py-2">
+                        <i class="fas fa-list mr-3"></i>
+                        Manage Notes
+                    </a>
+                    <a href="/upload-question-papers" class="flex items-center py-2">
+                        <i class="fas fa-file-alt mr-3"></i>
+                        Upload Question Papers
+                    </a>
+                    <a href="/manage-question-papers" class="flex items-center py-2">
+                        <i class="fas fa-list-alt mr-3"></i>
+                        Manage Question Papers
+                    </a>
+                    <a href="#" class="flex items-center py-2">
+                        <i class="fas fa-bullhorn mr-3"></i>
+                        Post Notices
+                    </a>
+                    <form action="/api/v1/faculty/logout" method="POST">
+                        <button type="submit" class="flex items-center py-2 text-white">
+                            <i class="fas fa-sign-out-alt mr-3"></i>
+                            Logout
+                        </button>
+                    </form>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Main content -->
+        <main class="flex-grow p-6 md:p-8 overflow-y-auto md:ml-64 md:mt-0 mt-16">
+            <!-- Header Section -->
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-gray-800">Upload Question Papers</h1>
+                <p class="text-gray-600 mt-2">Share previous exam papers with your students</p>
+            </div>
+
+            <!-- Upload Form -->
+            <div class="bg-white rounded-lg shadow-md p-6 form-container">
+                <% if (typeof success !== 'undefined' && success) { %>
+                <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6" role="alert">
+                    <p class="font-bold">Success!</p>
+                    <p><%= success %></p>
+                </div>
+                <% } %>
+                
+                <% if (typeof error !== 'undefined' && error) { %>
+                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6" role="alert">
+                    <p class="font-bold">Error!</p>
+                    <p><%= error %></p>
+                </div>
+                <% } %>
+
+                <form action="/api/v1/questionpaper/addquestionpaper" method="POST" enctype="multipart/form-data" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Subject -->
+                        <div>
+                            <label for="subject" class="block text-sm font-medium text-gray-700">
+                                Subject <span class="required-star">*</span>
+                            </label>
+                            <input 
+                                type="text" 
+                                id="subject" 
+                                name="subject" 
+                                required
+                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+                                placeholder="e.g., Data Structures"
+                            >
+                        </div>
+
+                        <!-- Year -->
+                        <div>
+                            <label for="year" class="block text-sm font-medium text-gray-700">
+                                Year <span class="required-star">*</span>
+                            </label>
+                            <select 
+                                id="year" 
+                                name="year" 
+                                required
+                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+                            >
+                                <option value="" disabled selected>Select Year</option>
+                                <% 
+                                    const currentYear = new Date().getFullYear();
+                                    for (let i = currentYear; i >= currentYear - 10; i--) { 
+                                %>
+                                    <option value="<%= i %>"><%= i %></option>
+                                <% } %>
+                            </select>
+                        </div>
+
+                        <!-- Branch -->
+                        <div>
+                            <label for="branch" class="block text-sm font-medium text-gray-700">
+                                Branch <span class="required-star">*</span>
+                            </label>
+                            <select 
+                                id="branch" 
+                                name="branch" 
+                                required
+                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+                            >
+                                <option value="" disabled selected>Select Branch</option>
+                                <option value="CSE">Computer Science (CSE)</option>
+                                <option value="ECE">Electronics & Communication (ECE)</option>
+                                <option value="EEE">Electrical & Electronics (EEE)</option>
+                                <option value="MECH">Mechanical Engineering (MECH)</option>
+                                <option value="CIVIL">Civil Engineering (CIVIL)</option>
+                                <option value="IT">Information Technology (IT)</option>
+                                <option value="CSC">Computer Science & Cybersecurity (CSC)</option>
+                                <option value="OTHER">Other</option>
+                            </select>
+                        </div>
+
+                        <!-- Semester -->
+                        <div>
+                            <label for="sem" class="block text-sm font-medium text-gray-700">
+                                Semester <span class="required-star">*</span>
+                            </label>
+                            <select 
+                                id="sem" 
+                                name="sem" 
+                                required
+                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+                            >
+                                <option value="" disabled selected>Select Semester</option>
+                                <option value="1">Semester 1</option>
+                                <option value="2">Semester 2</option>
+                                <option value="3">Semester 3</option>
+                                <option value="4">Semester 4</option>
+                                <option value="5">Semester 5</option>
+                                <option value="6">Semester 6</option>
+                                <option value="7">Semester 7</option>
+                                <option value="8">Semester 8</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- File Upload -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">
+                            Upload Question Paper File <span class="required-star">*</span> (PDF or Image, max 10MB)
+                        </label>
+                        <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                            <div class="space-y-1 text-center">
+                                <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                <div class="flex text-sm text-gray-600">
+                                    <label for="questionpaper" class="relative cursor-pointer bg-white rounded-md font-medium text-teal-600 hover:text-teal-500 focus-within:outline-none">
+                                        <span>Upload a file</span>
+                                        <input id="questionpaper" name="questionpaper" type="file" class="sr-only" accept=".pdf,.jpg,.jpeg,.png" required>
+                                    </label>
+                                    <p class="pl-1">or drag and drop</p>
+                                </div>
+                                <p class="text-xs text-gray-500">
+                                    PDF, PNG, JPG up to 10MB
+                                </p>
+                            </div>
+                        </div>
+                        <p class="mt-2 text-sm text-gray-500" id="file-name"></p>
+                        
+                        <!-- Upload Progress Bar (hidden by default) -->
+                        <div id="upload-progress-container" class="mt-4 hidden">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Upload Progress</label>
+                            <div class="w-full bg-gray-200 rounded-full h-4">
+                                <div id="upload-progress-bar" class="bg-teal-600 h-4 rounded-full text-center" style="width: 0%"></div>
+                            </div>
+                            <p id="upload-progress-text" class="text-xs text-gray-500 mt-1 text-center">0%</p>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="flex justify-end">
+                        <button
+                            id="upload-button"
+                            type="submit"
+                            class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
+                        >
+                            <i class="fas fa-cloud-upload-alt mr-2"></i>
+                            Upload Question Paper
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobileMenuToggle').addEventListener('click', function() {
+            document.getElementById('mobileMenu').classList.toggle('hidden');
+        });
+        
+        document.getElementById('mobileMenuClose').addEventListener('click', function() {
+            document.getElementById('mobileMenu').classList.add('hidden');
+        });
+
+        // File upload preview
+        document.getElementById('questionpaper').addEventListener('change', function(e) {
+            const fileName = e.target.files[0]?.name;
+            if (fileName) {
+                document.getElementById('file-name').textContent = 'Selected file: ' + fileName;
+            } else {
+                document.getElementById('file-name').textContent = '';
+            }
+        });
+        
+        // File upload progress handling
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const form = this;
+            const fileInput = document.getElementById('questionpaper');
+            const uploadButton = document.getElementById('upload-button');
+            const progressContainer = document.getElementById('upload-progress-container');
+            const progressBar = document.getElementById('upload-progress-bar');
+            const progressText = document.getElementById('upload-progress-text');
+            
+            // Check if a file is selected
+            if (!fileInput.files.length) {
+                alert('Please select a file to upload');
+                return;
+            }
+            
+            // Show progress bar
+            progressContainer.classList.remove('hidden');
+            uploadButton.disabled = true;
+            uploadButton.classList.add('opacity-50', 'cursor-not-allowed');
+            
+            // Create FormData and append all form fields
+            const formData = new FormData(form);
+            
+            // Create and configure AJAX request
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', form.action, true);
+            
+            // Set up progress event
+            xhr.upload.onprogress = function(e) {
+                if (e.lengthComputable) {
+                    const percentComplete = Math.round((e.loaded / e.total) * 100);
+                    progressBar.style.width = percentComplete + '%';
+                    progressText.textContent = percentComplete + '%';
+                    
+                    console.log('Upload progress: ' + percentComplete + '%');
+                }
+            };
+            
+            // Set up load event (when upload is complete)
+            xhr.onload = function() {
+                if (xhr.status >= 200 && xhr.status < 400) {
+                    // Success - redirect to the URL returned by the server or handle success
+                    progressBar.style.width = '100%';
+                    progressText.textContent = 'Upload complete!';
+                    
+                    // Try to parse JSON response, but handle HTML responses too
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        if (response.redirectUrl) {
+                            window.location.href = response.redirectUrl;
+                            return;
+                        }
+                    } catch(e) {
+                        console.log('Response is not JSON, likely HTML redirect');
+                    }
+                    
+                    // If we get here, either the response wasn't JSON or didn't have a redirectUrl
+                    setTimeout(function() {
+                        window.location.href = '/upload-question-papers?success=Question paper uploaded successfully';
+                    }, 500); // Short delay to show 100% complete
+                } else {
+                    // Error handling
+                    progressBar.style.width = '0%';
+                    progressText.textContent = 'Upload failed';
+                    progressBar.classList.remove('bg-teal-600');
+                    progressBar.classList.add('bg-red-600');
+                    
+                    // Re-enable the upload button
+                    uploadButton.disabled = false;
+                    uploadButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                    
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        alert('Error: ' + (response.message || 'Failed to upload file'));
+                    } catch (e) {
+                        alert('Error: Failed to upload file. Status: ' + xhr.status);
+                    }
+                }
+            };
+            
+            // Set up error event
+            xhr.onerror = function() {
+                progressBar.style.width = '0%';
+                progressText.textContent = 'Network error';
+                progressBar.classList.remove('bg-teal-600');
+                progressBar.classList.add('bg-red-600');
+                
+                // Re-enable the upload button
+                uploadButton.disabled = false;
+                uploadButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                
+                alert('Network error occurred during upload');
+            };
+            
+            // Send the form data
+            xhr.send(formData);
+            console.log('Form submitted, upload started');
+        });
+    </script>
+</body>
+</html> 

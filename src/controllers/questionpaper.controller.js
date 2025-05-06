@@ -69,6 +69,11 @@ const addQuestionPaper = asyncHandler(async (req, res) => {
             uploadedBy: req.faculty.name,
         });
 
+        // Check if the request is from a browser or API
+        if (req.headers['accept'] && req.headers['accept'].includes('text/html')) {
+            return res.redirect('/upload-question-papers?success=Question paper uploaded successfully');
+        }
+
         return res
             .status(201)
             .json(new ApiResponse(201, newQuestionPaper, "Question Paper added successfully"));
@@ -126,6 +131,11 @@ const deleteQuestionPaper = asyncHandler(async (req, res) => {
         // Delete the question paper from the database
         await QuestionPaper.findByIdAndDelete(id);
 
+        // Check if the request is from a browser or API
+        if (req.headers['accept'] && req.headers['accept'].includes('text/html')) {
+            return res.redirect('/manage-question-papers?success=Question paper deleted successfully');
+        }
+
         return res
             .status(200)
             .json(new ApiResponse(200, { deletedId: id }, "Question Paper deleted successfully"));
@@ -137,4 +147,38 @@ const deleteQuestionPaper = asyncHandler(async (req, res) => {
     }
 });
 
-export { addQuestionPaper, deleteQuestionPaper };
+const getAllQuestionPapers = asyncHandler(async (req, res) => {
+    try {
+        const questionPapers = await QuestionPaper.find().sort({ createdAt: -1 });
+        
+        // Check if request is from web browser or API client
+        if (req.headers['accept'] && req.headers['accept'].includes('text/html')) {
+            return res.render('manage-question-papers', {
+                faculty: req.faculty,
+                questionPapers: questionPapers,
+                success: req.query.success || null,
+                error: req.query.error || null
+            });
+        }
+        
+        return res.status(200).json(
+            new ApiResponse(200, questionPapers, "Question papers fetched successfully")
+        );
+    } catch (error) {
+        console.error("Error fetching question papers:", error);
+        
+        if (req.headers['accept'] && req.headers['accept'].includes('text/html')) {
+            return res.render('manage-question-papers', {
+                faculty: req.faculty,
+                questionPapers: [],
+                error: "Failed to fetch question papers: " + error.message
+            });
+        }
+        
+        return res.status(500).json(
+            new ApiResponse(500, null, "Failed to fetch question papers: " + error.message)
+        );
+    }
+});
+
+export { addQuestionPaper, deleteQuestionPaper, getAllQuestionPapers };

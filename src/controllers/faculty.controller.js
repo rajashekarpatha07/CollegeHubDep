@@ -64,7 +64,7 @@ const LoginFaculty = asyncHandler(async (req, res) => {
         throw new ApiError(400, 'The faculty Doesn\'t exist register first');
     }
 
-    const isPassowrdMatch = await faculty.isPassowordMatch(password);
+    const isPassowrdMatch = await faculty.isPasswordMatch(password);
     if(!isPassowrdMatch) {
         throw new ApiError(400, 'Invalid password');
     }
@@ -76,6 +76,15 @@ const LoginFaculty = asyncHandler(async (req, res) => {
     const options = {
         httpOnly: true,
         secure:true
+    }
+
+    // Check if request is from a browser (HTML) or API client
+    if (req.headers['accept'] && req.headers['accept'].includes('text/html')) {
+        return res
+            .status(200)
+            .cookie('refreshToken', refreshToken, options)
+            .cookie('accessToken', accessToken, options)
+            .redirect('/faculty-dashboard');
     }
 
     return res
@@ -105,4 +114,17 @@ const LogoutFaculty = asyncHandler(async (req, res) => {
         .clearCookie('accessToken')
         .json(new ApiResponse(200, null, 'Faculty Logged out successfully'));
 });
+
+export const showFacultyDashboard = asyncHandler(async (req, res) => {
+    res.render("faculty-dashboard", { faculty: req.faculty });
+});
+
+export const showUploadNotesPage = asyncHandler(async (req, res) => {
+    res.render("upload-notes", { 
+        faculty: req.faculty,
+        success: req.query.success || null,
+        error: req.query.error || null
+    });
+});
+
 export { registerFaculty, LoginFaculty, LogoutFaculty };
