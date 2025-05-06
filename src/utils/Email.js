@@ -24,7 +24,7 @@ const sendWelcomeEmail = async (email, name, role = 'student') => {
           <p style="font-size: 15px;">Stay tuned for exciting updates, important announcements, and learning resources that will help you grow and succeed.</p>
           <p style="font-size: 15px;">Don't forget to explore all the features we've built just for you!</p>
           <br/>
-          <p style="color: #555;">Best regards,<br/><strong>College Team</strong></p>
+          <p style="color: #555;">Best regards,<br/><strong>College Hub Team</strong></p>
           <hr style="margin-top: 30px; border: none; border-top: 1px solid #ddd;">
           <p style="font-size: 12px; color: #999; text-align: center; margin-top: 20px;">
           </p>
@@ -43,7 +43,7 @@ const sendWelcomeEmail = async (email, name, role = 'student') => {
             <p style="font-size: 15px;">Your mentorship and knowledge will play a vital role in shaping future minds.</p>
             <p style="font-size: 15px;">We look forward to your contributions, insights, and collaboration in making College Hub even stronger.</p>
             <br/>
-            <p style="color: #555;">Warm regards,<br/><strong>College Team</strong></p>
+            <p style="color: #555;">Warm regards,<br/><strong>College Hub Team</strong></p>
             <hr style="margin-top: 30px; border: none; border-top: 1px solid #ddd;">
             <p style="font-size: 12px; color: #999; text-align: center; margin-top: 20px;"></p>
           </div>

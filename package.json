@@ -10,8 +10,8 @@
     "build": "echo 'No build step required'"
   },
   "engines": {
-    "node": ">=16.0.0"
-  },
+  "node": "18.x"
+},
   "keywords": [
     "education",
     "college",
