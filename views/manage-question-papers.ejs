@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Question Papers - College Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .sidebar {
+            background: linear-gradient(to bottom, #134e4a, #0f766e);
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+        .table-row-hover:hover {
+            background-color: #f0fdfa;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <aside class="sidebar text-white w-64 flex-shrink-0 hidden md:block">
+            <div class="p-6">
+                <h1 class="text-2xl font-bold mb-1">College Hub</h1>
+                <p class="text-sm opacity-75">Faculty Portal</p>
+            </div>
+            <nav class="mt-6">
+                <a href="/faculty-dashboard" class="flex items-center px-6 py-3 hover:bg-teal-700 hover:bg-opacity-50 transition">
+                    <i class="fas fa-tachometer-alt mr-3"></i>
+                    Dashboard
+                </a>
+                <a href="/upload-notes" class="flex items-center px-6 py-3 hover:bg-teal-700 hover:bg-opacity-50 transition">
+                    <i class="fas fa-book mr-3"></i>
+                    Upload Notes
+                </a>
+                <a href="/manage-notes" class="flex items-center px-6 py-3 hover:bg-teal-700 hover:bg-opacity-50 transition">
+                    <i class="fas fa-list mr-3"></i>
+                    Manage Notes
+                </a>
+                <a href="/upload-question-papers" class="flex items-center px-6 py-3 hover:bg-teal-700 hover:bg-opacity-50 transition">
+                    <i class="fas fa-file-alt mr-3"></i>
+                    Upload Question Papers
+                </a>
+                <a href="/manage-question-papers" class="flex items-center px-6 py-3 bg-teal-700 bg-opacity-50">
+                    <i class="fas fa-list-alt mr-3"></i>
+                    Manage Question Papers
+                </a>
+                <a href="#" class="flex items-center px-6 py-3 hover:bg-teal-700 hover:bg-opacity-50 transition">
+                    <i class="fas fa-bullhorn mr-3"></i>
+                    Post Notices
+                </a>
+                <form action="/api/v1/faculty/logout" method="POST" class="mt-auto px-6 py-3">
+                    <button type="submit" class="flex items-center text-white hover:text-red-200 transition">
+                        <i class="fas fa-sign-out-alt mr-3"></i>
+                        Logout
+                    </button>
+                </form>
+            </nav>
+        </aside>
+
+        <!-- Mobile header -->
+        <div class="md:hidden bg-teal-600 text-white p-4 w-full fixed top-0 z-10 flex justify-between items-center">
+            <h1 class="text-xl font-bold">College Hub</h1>
+            <button id="mobileMenuToggle" class="text-white">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Mobile menu -->
+        <div id="mobileMenu" class="md:hidden fixed inset-0 bg-gray-900 bg-opacity-50 z-20 hidden">
+            <div class="bg-teal-600 text-white h-full w-64 p-4">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold">Menu</h2>
+                    <button id="mobileMenuClose" class="text-white">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <nav class="flex flex-col space-y-4">
+                    <a href="/faculty-dashboard" class="flex items-center py-2">
+                        <i class="fas fa-tachometer-alt mr-3"></i>
+                        Dashboard
+                    </a>
+                    <a href="/upload-notes" class="flex items-center py-2">
+                        <i class="fas fa-book mr-3"></i>
+                        Upload Notes
+                    </a>
+                    <a href="/manage-notes" class="flex items-center py-2">
+                        <i class="fas fa-list mr-3"></i>
+                        Manage Notes
+                    </a>
+                    <a href="/upload-question-papers" class="flex items-center py-2">
+                        <i class="fas fa-file-alt mr-3"></i>
+                        Upload Question Papers
+                    </a>
+                    <a href="/manage-question-papers" class="flex items-center py-2">
+                        <i class="fas fa-list-alt mr-3"></i>
+                        Manage Question Papers
+                    </a>
+                    <a href="#" class="flex items-center py-2">
+                        <i class="fas fa-bullhorn mr-3"></i>
+                        Post Notices
+                    </a>
+                    <form action="/api/v1/faculty/logout" method="POST">
+                        <button type="submit" class="flex items-center py-2 text-white">
+                            <i class="fas fa-sign-out-alt mr-3"></i>
+                            Logout
+                        </button>
+                    </form>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Main content -->
+        <main class="flex-grow p-6 md:p-8 overflow-y-auto md:ml-64 md:mt-0 mt-16">
+            <!-- Header Section -->
+            <div class="flex justify-between items-center mb-8">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-800">Manage Question Papers</h1>
+                    <p class="text-gray-600 mt-2">View, organize, and delete examination papers</p>
+                </div>
+                <a href="/upload-question-papers" class="bg-teal-600 hover:bg-teal-700 text-white font-medium py-2 px-4 rounded inline-flex items-center transition">
+                    <i class="fas fa-plus mr-2"></i>
+                    Add New Question Paper
+                </a>
+            </div>
+
+            <!-- Alerts -->
+            <% if (typeof success !== 'undefined' && success) { %>
+            <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6" role="alert">
+                <p class="font-bold">Success!</p>
+                <p><%= success %></p>
+            </div>
+            <% } %>
+            
+            <% if (typeof error !== 'undefined' && error) { %>
+            <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6" role="alert">
+                <p class="font-bold">Error!</p>
+                <p><%= error %></p>
+            </div>
+            <% } %>
+
+            <!-- Question Papers Table -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="p-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
+                    <h2 class="text-lg font-semibold text-gray-700">
+                        <i class="fas fa-file-alt mr-2"></i>
+                        Question Papers List
+                    </h2>
+                    <div class="flex items-center">
+                        <div class="relative">
+                            <input 
+                                type="text" 
+                                id="searchInput" 
+                                placeholder="Search question papers..." 
+                                class="pl-9 pr-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-teal-500"
+                            >
+                            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        </div>
+                        <div class="flex space-x-2 ml-2">
+                            <select 
+                                id="branchFilter" 
+                                class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-teal-500"
+                            >
+                                <option value="">All Branches</option>
+                                <option value="CSE">CSE</option>
+                                <option value="ECE">ECE</option>
+                                <option value="EEE">EEE</option>
+                                <option value="MECH">MECH</option>
+                                <option value="CIVIL">CIVIL</option>
+                                <option value="IT">IT</option>
+                                <option value="CSC">CSC</option>
+                                <option value="OTHER">OTHER</option>
+                            </select>
+                            <select 
+                                id="yearFilter" 
+                                class="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-teal-500"
+                            >
+                                <option value="">All Years</option>
+                                <% 
+                                    const currentYear = new Date().getFullYear();
+                                    for (let i = currentYear; i >= currentYear - 5; i--) { 
+                                %>
+                                    <option value="<%= i %>"><%= i %></option>
+                                <% } %>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Subject
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Year
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Branch
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Semester
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Uploaded On
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200" id="questionPaperTable">
+                            <% if (questionPapers && questionPapers.length > 0) { %>
+                                <% questionPapers.forEach(paper => { %>
+                                    <tr class="table-row-hover">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm font-medium text-gray-900">
+                                                <%= paper.subject %>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                <%= paper.year %>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-teal-100 text-teal-800">
+                                                <%= paper.branch %>
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            Semester <%= paper.sem %>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            <%= new Date(paper.createdAt).toLocaleDateString('en-US', { 
+                                                year: 'numeric', 
+                                                month: 'short', 
+                                                day: 'numeric' 
+                                            }) %>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <a href="<%= paper.fileUrl %>" target="_blank" class="text-blue-600 hover:text-blue-900 mr-3">
+                                                <i class="fas fa-eye"></i>
+                                                View
+                                            </a>
+                                            <button 
+                                                class="text-red-600 hover:text-red-900 ml-3 delete-paper-btn" 
+                                                data-id="<%= paper._id %>"
+                                                data-subject="<%= paper.subject %>"
+                                                data-year="<%= paper.year %>"
+                                            >
+                                                <i class="fas fa-trash-alt"></i>
+                                                Delete
+                                            </button>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="6" class="px-6 py-4 text-center text-gray-500">
+                                        <p>No question papers found</p>
+                                        <a href="/upload-question-papers" class="text-teal-600 hover:text-teal-800 mt-2 inline-block">
+                                            <i class="fas fa-plus mr-1"></i>
+                                            Upload your first question paper
+                                        </a>
+                                    </td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-lg p-6 max-w-md mx-4">
+            <div class="text-center mb-4">
+                <i class="fas fa-exclamation-triangle text-5xl text-red-500 mb-4"></i>
+                <h3 class="text-xl font-bold text-gray-800">Confirm Deletion</h3>
+                <p class="text-gray-600 mt-2">Are you sure you want to delete this question paper? This action cannot be undone.</p>
+                <p id="deleteItemName" class="font-medium text-gray-800 mt-2"></p>
+            </div>
+            <div class="flex justify-center space-x-4 mt-6">
+                <button id="cancelDelete" class="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-md transition">
+                    Cancel
+                </button>
+                <form id="deleteForm" method="POST">
+                    <button type="submit" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition">
+                        Delete
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobileMenuToggle').addEventListener('click', function() {
+            document.getElementById('mobileMenu').classList.toggle('hidden');
+        });
+        
+        document.getElementById('mobileMenuClose').addEventListener('click', function() {
+            document.getElementById('mobileMenu').classList.add('hidden');
+        });
+
+        // Search and filter functionality
+        const searchInput = document.getElementById('searchInput');
+        const branchFilter = document.getElementById('branchFilter');
+        const yearFilter = document.getElementById('yearFilter');
+        const questionPaperTable = document.getElementById('questionPaperTable');
+
+        function filterTable() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const branchValue = branchFilter.value;
+            const yearValue = yearFilter.value;
+            
+            const rows = questionPaperTable.querySelectorAll('tr:not(:first-child)');
+            
+            rows.forEach(row => {
+                const subject = row.querySelector('td:nth-child(1)').textContent.toLowerCase();
+                const year = row.querySelector('td:nth-child(2)').textContent.trim();
+                const branch = row.querySelector('td:nth-child(3)').textContent.trim();
+                
+                const matchesSearch = subject.includes(searchTerm);
+                const matchesBranch = branchValue === '' || branch.includes(branchValue);
+                const matchesYear = yearValue === '' || year.includes(yearValue);
+                
+                if (matchesSearch && matchesBranch && matchesYear) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        searchInput.addEventListener('input', filterTable);
+        branchFilter.addEventListener('change', filterTable);
+        yearFilter.addEventListener('change', filterTable);
+
+        // Delete question paper confirmation modal
+        const deleteModal = document.getElementById('deleteModal');
+        const deleteForm = document.getElementById('deleteForm');
+        const deleteItemName = document.getElementById('deleteItemName');
+        const cancelDelete = document.getElementById('cancelDelete');
+        
+        document.querySelectorAll('.delete-paper-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const paperId = this.dataset.id;
+                const paperSubject = this.dataset.subject;
+                const paperYear = this.dataset.year;
+                
+                deleteForm.action = `/api/v1/questionpaper/deletequestionpaper/${paperId}`;
+                deleteItemName.textContent = `${paperSubject} (${paperYear})`;
+                deleteModal.classList.remove('hidden');
+            });
+        });
+        
+        cancelDelete.addEventListener('click', function() {
+            deleteModal.classList.add('hidden');
+        });
+    </script>
+</body>
+</html> 

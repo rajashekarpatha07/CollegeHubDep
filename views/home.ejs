@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Hub - Welcome</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1e40af, #3b82f6, #0ea5e9);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+        
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+        
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+    <header class="py-6 text-center">
+        <h1 class="text-4xl font-bold text-white mb-2">Welcome to College Hub</h1>
+        <p class="text-lg text-white opacity-90">Your central platform for educational resources</p>
+    </header>
+    
+    <main class="flex-grow flex items-center justify-center p-6">
+        <div class="container mx-auto max-w-5xl">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Student Card -->
+                <a href="/StudentLogin" class="card p-8 flex flex-col items-center text-center">
+                    <div class="text-blue-600 text-7xl mb-6 animate-float">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-3">Student Portal</h2>
+                    <p class="text-gray-600 mb-6">Access your notes, question papers, and notices</p>
+                    <button class="mt-auto bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition duration-300 flex items-center">
+                        Sign In
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </a>
+                
+                <!-- Faculty Card -->
+                <a href="/FacultyLogin" class="card p-8 flex flex-col items-center text-center">
+                    <div class="text-teal-600 text-7xl mb-6 animate-float" style="animation-delay: 0.5s;">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-3">Faculty Portal</h2>
+                    <p class="text-gray-600 mb-6">Upload resources and manage educational content</p>
+                    <button class="mt-auto bg-teal-600 hover:bg-teal-700 text-white font-medium py-3 px-6 rounded-lg transition duration-300 flex items-center">
+                        Sign In
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </a>
+            </div>
+        </div>
+    </main>
+    
+    <footer class="bg-white bg-opacity-10 text-white py-4 text-center">
+        <p>© <%= new Date().getFullYear() %> College Hub. All rights reserved.</p>
+    </footer>
+</body>
+</html> 

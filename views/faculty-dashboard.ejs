@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Dashboard - College Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .sidebar {
+            background: linear-gradient(to bottom, #134e4a, #0f766e);
+        }
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <aside class="sidebar text-white w-64 flex-shrink-0 hidden md:block">
+            <div class="p-6">
+                <h1 class="text-2xl font-bold mb-1">College Hub</h1>
+                <p class="text-sm opacity-75">Faculty Portal</p>
+            </div>
+            <nav class="mt-6">
+                <a href="/faculty-dashboard" class="flex items-center px-6 py-3 bg-teal-700 bg-opacity-50">
+                    <i class="fas fa-tachometer-alt mr-3"></i>
+                    Dashboard
+                </a>
+                <a href="/upload-notes" class="flex items-center px-6 py-3 hover:bg-teal-700 hover:bg-opacity-50 transition">
+                    <i class="fas fa-book mr-3"></i>
+                    Upload Notes
+                </a>
+                <a href="/manage-notes" class="flex items-center px-6 py-3 hover:bg-teal-700 hover:bg-opacity-50 transition">
+                    <i class="fas fa-list mr-3"></i>
+                    Manage Notes
+                </a>
+                <a href="/upload-question-papers" class="flex items-center px-6 py-3 hover:bg-teal-700 hover:bg-opacity-50 transition">
+                    <i class="fas fa-file-alt mr-3"></i>
+                    Upload Question Papers
+                </a>
+                <a href="/manage-question-papers" class="flex items-center px-6 py-3 hover:bg-teal-700 hover:bg-opacity-50 transition">
+                    <i class="fas fa-list-alt mr-3"></i>
+                    Manage Question Papers
+                </a>
+                <a href="/upload-notices" class="flex items-center px-6 py-3 hover:bg-teal-700 hover:bg-opacity-50 transition">
+                    <i class="fas fa-bullhorn mr-3"></i>
+                    Post Notices
+                </a>
+                <a href="/manage-notices" class="flex items-center px-6 py-3 hover:bg-teal-700 hover:bg-opacity-50 transition">
+                    <i class="fas fa-clipboard-list mr-3"></i>
+                    Manage Notices
+                </a>
+                <a href="#" class="flex items-center px-6 py-3 hover:bg-teal-700 hover:bg-opacity-50 transition">
+                    <i class="fas fa-cog mr-3"></i>
+                    Settings
+                </a>
+                <form action="/api/v1/faculty/logout" method="POST" class="mt-auto px-6 py-3">
+                    <button type="submit" class="flex items-center text-white hover:text-red-200 transition">
+                        <i class="fas fa-sign-out-alt mr-3"></i>
+                        Logout
+                    </button>
+                </form>
+            </nav>
+        </aside>
+
+        <!-- Mobile header -->
+        <div class="md:hidden bg-teal-600 text-white p-4 w-full fixed top-0 z-10 flex justify-between items-center">
+            <h1 class="text-xl font-bold">College Hub</h1>
+            <button id="mobileMenuToggle" class="text-white">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Mobile menu -->
+        <div id="mobileMenu" class="md:hidden fixed inset-0 bg-gray-900 bg-opacity-50 z-20 hidden">
+            <div class="bg-teal-600 text-white h-full w-64 p-4">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold">Menu</h2>
+                    <button id="mobileMenuClose" class="text-white">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <nav class="flex flex-col space-y-4">
+                    <a href="/faculty-dashboard" class="flex items-center py-2">
+                        <i class="fas fa-tachometer-alt mr-3"></i>
+                        Dashboard
+                    </a>
+                    <a href="/upload-notes" class="flex items-center py-2">
+                        <i class="fas fa-book mr-3"></i>
+                        Upload Notes
+                    </a>
+                    <a href="/manage-notes" class="flex items-center py-2">
+                        <i class="fas fa-list mr-3"></i>
+                        Manage Notes
+                    </a>
+                    <a href="/upload-question-papers" class="flex items-center py-2">
+                        <i class="fas fa-file-alt mr-3"></i>
+                        Upload Question Papers
+                    </a>
+                    <a href="/manage-question-papers" class="flex items-center py-2">
+                        <i class="fas fa-list-alt mr-3"></i>
+                        Manage Question Papers
+                    </a>
+                    <a href="/upload-notices" class="flex items-center py-2">
+                        <i class="fas fa-bullhorn mr-3"></i>
+                        Post Notices
+                    </a>
+                    <a href="/manage-notices" class="flex items-center py-2">
+                        <i class="fas fa-clipboard-list mr-3"></i>
+                        Manage Notices
+                    </a>
+                    <a href="#" class="flex items-center py-2">
+                        <i class="fas fa-cog mr-3"></i>
+                        Settings
+                    </a>
+                    <form action="/api/v1/faculty/logout" method="POST">
+                        <button type="submit" class="flex items-center py-2 text-white">
+                            <i class="fas fa-sign-out-alt mr-3"></i>
+                            Logout
+                        </button>
+                    </form>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Main content -->
+        <main class="flex-grow p-6 md:p-8 overflow-y-auto md:ml-64 md:mt-0 mt-16">
+            <!-- Welcome Section -->
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-gray-800">Welcome, <%= faculty.name %></h1>
+                <p class="text-gray-600 mt-2">Branch: <%= faculty.branch %> | <%= new Date().toLocaleDateString() %></p>
+            </div>
+
+            <!-- Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex items-center">
+                        <div class="rounded-full bg-blue-100 p-3 mr-4">
+                            <i class="fas fa-book text-blue-500"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-700">Notes</h3>
+                            <p class="text-2xl font-bold">0</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex items-center">
+                        <div class="rounded-full bg-green-100 p-3 mr-4">
+                            <i class="fas fa-file-alt text-green-500"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-700">Question Papers</h3>
+                            <p class="text-2xl font-bold">0</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex items-center">
+                        <div class="rounded-full bg-yellow-100 p-3 mr-4">
+                            <i class="fas fa-bullhorn text-yellow-500"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-700">Notices</h3>
+                            <p class="text-2xl font-bold">0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Quick Actions</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="card bg-white rounded-lg shadow p-6 text-center">
+                    <div class="text-5xl text-blue-500 mb-4">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Upload Notes</h3>
+                    <p class="text-gray-600 mb-4">Share study materials with your students</p>
+                    <a href="/upload-notes" class="inline-block bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded transition">
+                        Upload Now
+                    </a>
+                </div>
+                <div class="card bg-white rounded-lg shadow p-6 text-center">
+                    <div class="text-5xl text-green-500 mb-4">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Upload Question Papers</h3>
+                    <p class="text-gray-600 mb-4">Share previous exam papers for practice</p>
+                    <a href="/upload-question-papers" class="inline-block bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded transition">
+                        Upload Now
+                    </a>
+                </div>
+                <div class="card bg-white rounded-lg shadow p-6 text-center">
+                    <div class="text-5xl text-yellow-500 mb-4">
+                        <i class="fas fa-bullhorn"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Post Notice</h3>
+                    <p class="text-gray-600 mb-4">Share important announcements with students</p>
+                    <a href="/upload-notices" class="inline-block bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-2 px-4 rounded transition">
+                        Post Now
+                    </a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobileMenuToggle').addEventListener('click', function() {
+            document.getElementById('mobileMenu').classList.toggle('hidden');
+        });
+        
+        document.getElementById('mobileMenuClose').addEventListener('click', function() {
+            document.getElementById('mobileMenu').classList.add('hidden');
+        });
+    </script>
+</body>
+</html> 

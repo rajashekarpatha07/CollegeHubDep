@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Hub - Faculty Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to bottom, #134e4a, #0f766e);
+        }
+        .form-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        .error-message {
+            color: #dc2626;
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+        .success-message {
+            color: #16a34a;
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+        input:invalid[focused="true"] ~ .error-message {
+            display: block;
+        }
+        input:valid[focused="true"] ~ .success-message {
+            display: block;
+        }
+        .password-toggle {
+            cursor: pointer;
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .animate-bounce-slow {
+            animation: bounceSlow 3s infinite ease-in-out;
+        }
+        @keyframes bounceSlow {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+        .input-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #4b5563;
+        }
+        .input-with-icon {
+            padding-left: 2.5rem;
+        }
+        .quote-container {
+            background: #d1fae5;
+            border-left: 4px solid #10b981;
+        }
+        /* Error popup styles */
+        .error-popup {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #dc2626;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            max-width: 350px;
+            animation: slideIn 0.4s ease-out forwards;
+        }
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+        .slide-out {
+            animation: slideOut 0.4s ease-in forwards;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen py-12">
+    <!-- Error Popup -->
+    <% if (typeof error !== 'undefined' && error) { %>
+    <div id="errorPopup" class="error-popup">
+        <div class="flex justify-between items-start">
+            <div class="flex items-center">
+                <i class="fas fa-exclamation-circle mr-2"></i>
+                <span><%= error %></span>
+            </div>
+            <button onclick="closeErrorPopup()" class="ml-3 text-white">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+    <% } %>
+
+    <div class="form-container p-8 w-full max-w-md mx-4 animate-fade-in">
+        <!-- Header -->
+        <div class="text-center mb-6">
+            <i class="fas fa-chalkboard-teacher text-5xl text-teal-700 mb-4 animate-bounce-slow"></i>
+            <h1 class="text-3xl font-extrabold text-gray-900">Faculty Login</h1>
+            <p class="text-sm text-gray-600 mt-2">Access your teaching resources!</p>
+        </div>
+
+        <!-- Form -->
+        <form id="loginForm" class="space-y-5" action="/api/v1/faculty/login" method="POST">
+            <!-- Faculty ID -->
+            <div class="relative">
+                <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-teal-500 focus:border-teal-500 text-sm input-with-icon transition duration-300 hover:border-teal-400"
+                    placeholder="e.g., faculty@college.edu"
+                    focused="false"
+                >
+                <p class="error-message">Enter a valid email address.</p>
+                <p class="success-message">Looks great!</p>
+            </div>
+
+            <!-- Password -->
+            <div class="relative">
+                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    required
+                    minlength="8"
+                    class="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-teal-500 focus:border-teal-500 text-sm input-with-icon transition duration-300 hover:border-teal-400"
+                    placeholder="********"
+                    focused="false"
+                >
+                <i id="passwordToggle" class="fas fa-eye absolute right-4 top-[60%] transform -translate-y-1/2 password-toggle text-gray-500"></i>
+                <p class="error-message">Password must be at least 8 characters.</p>
+                <p class="success-message">Strong password!</p>
+            </div>
+
+            <!-- Submit Button -->
+            <div>
+                <button
+                    type="submit"
+                    id="submitButton"
+                    class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-md text-sm font-medium text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition duration-300 transform hover:scale-105"
+                >
+                    Log In
+                </button>
+            </div>
+        </form>
+
+        <!-- Link to Student login -->
+        <div class="mt-5 text-center">
+            <a href="/StudentLogin" class="text-sm text-teal-700 hover:text-teal-800 font-medium">
+                <i class="fas fa-user-graduate mr-1"></i>
+                Student? Login here
+            </a>
+        </div>
+
+        <!-- Form Message -->
+        <p id="formMessage" class="mt-4 text-center text-sm text-gray-600" aria-live="polite"></p>
+
+        <!-- Quote -->
+        <div class="quote-container mt-6 p-4 rounded-lg">
+            <p class="text-sm italic text-gray-800">
+                "Education is not the filling of a pail, but the lighting of a fire." – W.B. Yeats
+            </p>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Password visibility toggle
+            const passwordToggle = document.getElementById('passwordToggle');
+            const passwordInput = document.getElementById('password');
+            
+            passwordToggle.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.classList.toggle('fa-eye');
+                this.classList.toggle('fa-eye-slash');
+            });
+            
+            // Form validation
+            const inputs = document.querySelectorAll('input[required]');
+            inputs.forEach(input => {
+                input.addEventListener('blur', function() {
+                    this.setAttribute('focused', 'true');
+                });
+                
+                input.addEventListener('input', function() {
+                    if (this.checkValidity()) {
+                        this.classList.remove('border-red-500');
+                        this.classList.add('border-green-500');
+                    } else {
+                        this.classList.remove('border-green-500');
+                        this.classList.add('border-red-500');
+                    }
+                });
+            });
+            
+            // Error popup close
+            window.closeErrorPopup = function() {
+                const popup = document.getElementById('errorPopup');
+                if (popup) {
+                    popup.classList.add('slide-out');
+                    setTimeout(() => {
+                        popup.style.display = 'none';
+                    }, 400);
+                }
+            };
+            
+            // Auto-close error popup after 5 seconds
+            setTimeout(closeErrorPopup, 5000);
+        });
+    </script>
+</body>
+</html> 

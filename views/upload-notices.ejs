@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Notices - College Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .sidebar {
+            background: linear-gradient(to bottom, #134e4a, #0f766e);
+        }
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .required-star {
+            color: #ef4444;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <aside class="sidebar text-white w-64 flex-shrink-0 hidden md:block">
+            <div class="p-6">
+                <h1 class="text-2xl font-bold mb-1">College Hub</h1>
+                <p class="text-sm opacity-75">Faculty Portal</p>
+            </div>
+            <nav class="mt-6">
+                <a href="/faculty-dashboard" class="flex items-center px-6 py-3 hover:bg-teal-700 hover:bg-opacity-50 transition">
+                    <i class="fas fa-tachometer-alt mr-3"></i>
+                    Dashboard
+                </a>
+                <a href="/upload-notes" class="flex items-center px-6 py-3 hover:bg-teal-700 hover:bg-opacity-50 transition">
+                    <i class="fas fa-book mr-3"></i>
+                    Upload Notes
+                </a>
+                <a href="/manage-notes" class="flex items-center px-6 py-3 hover:bg-teal-700 hover:bg-opacity-50 transition">
+                    <i class="fas fa-list mr-3"></i>
+                    Manage Notes
+                </a>
+                <a href="/upload-question-papers" class="flex items-center px-6 py-3 hover:bg-teal-700 hover:bg-opacity-50 transition">
+                    <i class="fas fa-file-alt mr-3"></i>
+                    Upload Question Papers
+                </a>
+                <a href="/manage-question-papers" class="flex items-center px-6 py-3 hover:bg-teal-700 hover:bg-opacity-50 transition">
+                    <i class="fas fa-list-alt mr-3"></i>
+                    Manage Question Papers
+                </a>
+                <a href="/upload-notices" class="flex items-center px-6 py-3 bg-teal-700 bg-opacity-50">
+                    <i class="fas fa-bullhorn mr-3"></i>
+                    Post Notices
+                </a>
+                <a href="/manage-notices" class="flex items-center px-6 py-3 hover:bg-teal-700 hover:bg-opacity-50 transition">
+                    <i class="fas fa-clipboard-list mr-3"></i>
+                    Manage Notices
+                </a>
+                <form action="/api/v1/faculty/logout" method="POST" class="mt-auto px-6 py-3">
+                    <button type="submit" class="flex items-center text-white hover:text-red-200 transition">
+                        <i class="fas fa-sign-out-alt mr-3"></i>
+                        Logout
+                    </button>
+                </form>
+            </nav>
+        </aside>
+
+        <!-- Mobile header -->
+        <div class="md:hidden bg-teal-600 text-white p-4 w-full fixed top-0 z-10 flex justify-between items-center">
+            <h1 class="text-xl font-bold">College Hub</h1>
+            <button id="mobileMenuToggle" class="text-white">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Mobile menu -->
+        <div id="mobileMenu" class="md:hidden fixed inset-0 bg-gray-900 bg-opacity-50 z-20 hidden">
+            <div class="bg-teal-600 text-white h-full w-64 p-4">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold">Menu</h2>
+                    <button id="mobileMenuClose" class="text-white">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <nav class="flex flex-col space-y-4">
+                    <a href="/faculty-dashboard" class="flex items-center py-2">
+                        <i class="fas fa-tachometer-alt mr-3"></i>
+                        Dashboard
+                    </a>
+                    <a href="/upload-notes" class="flex items-center py-2">
+                        <i class="fas fa-book mr-3"></i>
+                        Upload Notes
+                    </a>
+                    <a href="/manage-notes" class="flex items-center py-2">
+                        <i class="fas fa-list mr-3"></i>
+                        Manage Notes
+                    </a>
+                    <a href="/upload-question-papers" class="flex items-center py-2">
+                        <i class="fas fa-file-alt mr-3"></i>
+                        Upload Question Papers
+                    </a>
+                    <a href="/manage-question-papers" class="flex items-center py-2">
+                        <i class="fas fa-list-alt mr-3"></i>
+                        Manage Question Papers
+                    </a>
+                    <a href="/upload-notices" class="flex items-center py-2">
+                        <i class="fas fa-bullhorn mr-3"></i>
+                        Post Notices
+                    </a>
+                    <a href="/manage-notices" class="flex items-center py-2">
+                        <i class="fas fa-clipboard-list mr-3"></i>
+                        Manage Notices
+                    </a>
+                    <form action="/api/v1/faculty/logout" method="POST">
+                        <button type="submit" class="flex items-center py-2 text-white">
+                            <i class="fas fa-sign-out-alt mr-3"></i>
+                            Logout
+                        </button>
+                    </form>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Main content -->
+        <main class="flex-grow p-6 md:p-8 overflow-y-auto md:ml-64 md:mt-0 mt-16">
+            <!-- Header Section -->
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-gray-800">Post Notices</h1>
+                <p class="text-gray-600 mt-2">Share important announcements with your students</p>
+            </div>
+
+            <!-- Upload Form -->
+            <div class="bg-white rounded-lg shadow-md p-6 form-container">
+                <% if (typeof success !== 'undefined' && success) { %>
+                <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6" role="alert">
+                    <p class="font-bold">Success!</p>
+                    <p><%= success %></p>
+                </div>
+                <% } %>
+                
+                <% if (typeof error !== 'undefined' && error) { %>
+                <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6" role="alert">
+                    <p class="font-bold">Error!</p>
+                    <p><%= error %></p>
+                </div>
+                <% } %>
+
+                <form action="/api/v1/notices/addnotices" method="POST" class="space-y-6">
+                    <!-- Title -->
+                    <div>
+                        <label for="title" class="block text-sm font-medium text-gray-700">
+                            Title <span class="required-star">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="title" 
+                            name="title" 
+                            required
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+                            placeholder="e.g., Mid-Term Exam Schedule"
+                        >
+                    </div>
+
+                    <!-- Description -->
+                    <div>
+                        <label for="description" class="block text-sm font-medium text-gray-700">
+                            Description <span class="required-star">*</span>
+                        </label>
+                        <textarea 
+                            id="description" 
+                            name="description" 
+                            rows="5"
+                            required
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+                            placeholder="Detailed announcement content..."
+                        ></textarea>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Branch -->
+                        <div>
+                            <label for="branch" class="block text-sm font-medium text-gray-700">
+                                Branch <span class="required-star">*</span>
+                            </label>
+                            <select 
+                                id="branch" 
+                                name="branch" 
+                                required
+                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+                            >
+                                <option value="" disabled selected>Select Branch</option>
+                                <option value="CSE">Computer Science (CSE)</option>
+                                <option value="ECE">Electronics & Communication (ECE)</option>
+                                <option value="EEE">Electrical & Electronics (EEE)</option>
+                                <option value="MECH">Mechanical Engineering (MECH)</option>
+                                <option value="CIVIL">Civil Engineering (CIVIL)</option>
+                                <option value="IT">Information Technology (IT)</option>
+                                <option value="CSC">Computer Science & Cybersecurity (CSC)</option>
+                                <option value="ALL">All Branches</option>
+                                <option value="OTHER">Other</option>
+                            </select>
+                        </div>
+
+                        <!-- Batch Year -->
+                        <div>
+                            <label for="batchyear" class="block text-sm font-medium text-gray-700">
+                                Batch Year <span class="required-star">*</span>
+                            </label>
+                            <select 
+                                id="batchyear" 
+                                name="batchyear" 
+                                required
+                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+                            >
+                                <option value="" disabled selected>Select Batch Year</option>
+                                <option value="23">2023</option>
+                                <option value="24">2024</option>
+                                <option value="25">2025</option>
+                                <option value="26">2026</option>
+                            </select>
+                        </div>
+
+                        <!-- Semester -->
+                        <div>
+                            <label for="sem" class="block text-sm font-medium text-gray-700">
+                                Semester (Optional)
+                            </label>
+                            <select 
+                                id="sem" 
+                                name="sem"
+                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500"
+                            >
+                                <option value="" selected>All Semesters</option>
+                                <option value="1">Semester 1</option>
+                                <option value="2">Semester 2</option>
+                                <option value="3">Semester 3</option>
+                                <option value="4">Semester 4</option>
+                                <option value="5">Semester 5</option>
+                                <option value="6">Semester 6</option>
+                                <option value="7">Semester 7</option>
+                                <option value="8">Semester 8</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="flex justify-end">
+                        <button
+                            type="submit"
+                            class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
+                        >
+                            <i class="fas fa-bullhorn mr-2"></i>
+                            Post Notice
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobileMenuToggle').addEventListener('click', function() {
+            document.getElementById('mobileMenu').classList.toggle('hidden');
+        });
+        
+        document.getElementById('mobileMenuClose').addEventListener('click', function() {
+            document.getElementById('mobileMenu').classList.add('hidden');
+        });
+    </script>
+</body>
+</html> 

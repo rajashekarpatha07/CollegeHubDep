@@ -2,12 +2,13 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import session from "express-session";
+import methodOverride from "method-override";
 import studentRoutes from "./src/routes/student.route.js";
 import facultyRoutes from "./src/routes/faculty.route.js";
 import notesRoutes from "./src/routes/notes.route.js";
 import noticesRoutes from "./src/routes/notices.route.js";
 import questionPaperRoutes from "./src/routes/questionpaper.route.js";
-import { verifyStudent } from "./src/middlewares/auth.js";
+import { verifyStudent, verifyFaculty } from "./src/middlewares/auth.js";
 import { errorMiddleware } from "./src/middlewares/error.middleware.js";
 import { cleanupOnError } from "./src/middlewares/multer.middleware.js";
 import morgan from "morgan";
@@ -140,6 +141,9 @@ if (process.env.NODE_ENV === "development") {
 app.use(express.json({ limit: "10kb" }));
 app.use(express.urlencoded({ extended: true, limit: "10kb" }));
 
+// Method override middleware
+app.use(methodOverride('_method'));
+
 // Cookie parser
 app.use(cookieParser());
 
@@ -190,6 +194,11 @@ app.get("/StudentRegister", (req, res) => {
     res.render("StudentRegister");
 });
 
+// Faculty login route
+app.get("/FacultyLogin", (req, res) => {
+    res.render("FacultyLogin");
+});
+
 // Dashboard route
 app.get("/dashboard", verifyStudent, (req, res) => {
     res.render("dashboard", { student: req.student });
@@ -208,6 +217,53 @@ app.get("/notices", verifyStudent, (req, res) => {
 // Question Papers page route
 app.get("/questionpapers", verifyStudent, (req, res) => {
     res.render("questionpapers", { student: req.student });
+});
+
+// Faculty Dashboard route
+app.get("/faculty-dashboard", verifyFaculty, (req, res) => {
+    res.render("faculty-dashboard", { faculty: req.faculty });
+});
+
+// Upload Notes route
+app.get("/upload-notes", verifyFaculty, (req, res) => {
+    res.render("upload-notes", { 
+        faculty: req.faculty,
+        success: req.query.success || null,
+        error: req.query.error || null
+    });
+});
+
+// Manage Notes route
+app.get("/manage-notes", verifyFaculty, (req, res) => {
+    res.redirect("/api/v1/notes/manage");
+});
+
+// Upload Question Papers route
+app.get("/upload-question-papers", verifyFaculty, (req, res) => {
+    res.render("upload-question-papers", { 
+        faculty: req.faculty,
+        success: req.query.success || null,
+        error: req.query.error || null
+    });
+});
+
+// Manage Question Papers route
+app.get("/manage-question-papers", verifyFaculty, (req, res) => {
+    res.redirect("/api/v1/questionpaper/manage");
+});
+
+// Upload Notices route
+app.get("/upload-notices", verifyFaculty, (req, res) => {
+    res.render("upload-notices", { 
+        faculty: req.faculty,
+        success: req.query.success || null,
+        error: req.query.error || null
+    });
+});
+
+// Manage Notices route
+app.get("/manage-notices", verifyFaculty, (req, res) => {
+    res.redirect("/api/v1/notices/manage");
 });
 
 // PDF test page route (development only)

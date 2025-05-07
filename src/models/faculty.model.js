@@ -58,7 +58,7 @@ facultySchema.pre('save', async function(next){
     next();
 });
 
-facultySchema.methods.isPassowordMatch = async function(password){
+facultySchema.methods.isPasswordMatch = async function(password){
     return await bcrypt.compare(password, this.password);
 }
 
