@@ -104,6 +104,7 @@ const corsOptions = {
     } else {
       // For development, use allowed origins list
       const allowedOrigins = [
+        'http://localhost:10000',
         'http://localhost:3000',
         'http://localhost:5173',
         'http://127.0.0.1:5173',
@@ -172,9 +173,14 @@ app.get("/api/health", (req, res) => {
 });
 
 // View routes
-app.get("/", (req, res) => {
-    res.redirect("/StudentLogin");
+
+app.get('/', (req, res) => {
+  res.render("landing");
 });
+
+// app.get("/", (req, res) => {
+//     res.redirect("/StudentLogin");
+// });
 
 app.get("/StudentLogin", (req, res) => {
     res.render("StudentLogin");
