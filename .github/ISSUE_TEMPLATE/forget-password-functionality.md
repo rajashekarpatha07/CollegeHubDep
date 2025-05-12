@@ -1,50 +1,20 @@
 ---
 name: Forget Password Functionality
 about: Add a secure "Forget Password" feature to help users reset their password easily.
-title: feature request
-labels: enhancement, help wanted
-assignees: ''
-
 ---
 
-### [Feature Request] Forget Password Functionality
+Add a "Forget Password" feature to improve user experience and accessibility.
 
----
+Currently, users have no way to reset their password if they forget it. This feature will allow users to:
+- Enter their email on a "Forgot Password" page
+- Receive a secure, time-limited password reset link via email
+- Set a new password using that link
+- Have their password updated securely after backend token verification
 
-### Is your feature request related to a problem? Please describe.
+**Tech Suggestions:**
+- `Nodemailer` or any email service for sending reset links
+- `JWT` or `crypto` to generate secure tokens
+- Add token and expiry fields in the MongoDB user schema
+- Input validation and error handling
 
-Yes, currently there's no way for users to reset their password if they forget it. This can lock users out of their accounts, especially if they don’t have admin support.
-
----
-
-### Describe the solution you'd like
-
-Implement a “Forget Password” feature where:
-- User enters their email on a "Forgot Password" page
-- A secure, time-limited reset link is sent to their email
-- User clicks the link and is redirected to a form to set a new password
-- Backend verifies the reset token and updates the user's password
-
----
-
-### Describe alternatives you've considered
-
-- Manual password resets by admin (not scalable)
-- Asking users to re-register (not user-friendly)
-
----
-
-### Additional context
-
-**Suggested Tech Stack**:
-- `Nodemailer` (or any transactional email API) to send the reset email
-- `JWT` or `crypto.randomBytes` for secure tokens
-- MongoDB schema update to store reset token + expiry timestamp
-- Add appropriate error handling and input validation
-
----
-
-### Optional additional items
-
-**Assignees**:  
-@rajashekarpatha07
+This will reduce support needs and align the app with real-world standards.
