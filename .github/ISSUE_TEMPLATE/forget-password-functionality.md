@@ -1,6 +1,9 @@
 ---
 name: Forget Password Functionality
 about: Add a secure "Forget Password" feature to help users reset their password easily.
+title: '[Feature Request] Forget Password Functionality'
+labels: enhancement, help wanted
+assignees: '@rajashekarpatha07'
 ---
 
 Add a "Forget Password" feature to improve user experience and accessibility.
