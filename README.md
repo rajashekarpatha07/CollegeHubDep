@@ -195,3 +195,8 @@ Optional environment variables:
 - `IMAGEKIT_PUBLIC_KEY` - ImageKit public key
 - `IMAGEKIT_PRIVATE_KEY` - ImageKit private key
 - `IMAGEKIT_URL_ENDPOINT` - ImageKit URL endpoint
+
+## Contributors
+
+- [@rajashekarpatha07](https://github.com/rajashekarpatha07) - Backend Developer
+- [@Deeksha-Mane](https://github.com/Deeksha-Mane) - Frontend Developer
