@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - College Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #6366f1;
+            --dark: #1e293b;
+            --light: #f8fafc;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+        }
+        
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .map-container {
+            height: 400px;
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+        
+        .form-input:focus {
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <i class="fas fa-graduation-cap text-2xl text-indigo-600 mr-2"></i>
+                        <span class="text-xl font-bold text-gray-900">College Hub</span>
+                    </div>
+                </div>
+                <div class="hidden md:ml-6 md:flex md:items-center md:space-x-8">
+                    <a href="/" class="text-gray-700 hover:text-indigo-600 px-3 py-2 text-sm font-medium">Home</a>
+                    <a href="/about" class="text-gray-700 hover:text-indigo-600 px-3 py-2 text-sm font-medium">About</a>
+                    <a href="/contact" class="text-indigo-600 px-3 py-2 text-sm font-medium">Contact</a>
+                </div>
+                <div class="flex items-center">
+                    <a href="/login" class="text-gray-700 hover:text-indigo-600 px-3 py-2 text-sm font-medium mr-4">Login</a>
+                    <a href="/register" class="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700">
+                        Get Started
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="gradient-bg text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-6">Contact College Hub</h1>
+            <p class="text-xl text-indigo-100 max-w-3xl mx-auto">
+                Have questions or feedback? We'd love to hear from you!
+            </p>
+        </div>
+    </section>
+
+    <!-- Contact Methods -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Email Card -->
+                <div class="contact-card bg-white p-8 rounded-xl shadow-md transition duration-300 text-center">
+                    <div class="flex items-center justify-center h-16 w-16 rounded-full bg-indigo-100 text-indigo-600 mb-4 mx-auto">
+                        <i class="fas fa-envelope text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">Email Us</h3>
+                    <p class="text-gray-500 mb-4">
+                        For general inquiries and support
+                    </p>
+                    <a href="mailto:support@collegehub.edu" class="text-indigo-600 hover:text-indigo-800 font-medium">
+                        support@collegehub.edu
+                    </a>
+                </div>
+                
+                <!-- Phone Card -->
+                <div class="contact-card bg-white p-8 rounded-xl shadow-md transition duration-300 text-center">
+                    <div class="flex items-center justify-center h-16 w-16 rounded-full bg-green-100 text-green-600 mb-4 mx-auto">
+                        <i class="fas fa-phone-alt text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">Call Us</h3>
+                    <p class="text-gray-500 mb-4">
+                        Available Monday-Friday, 9am-5pm EST
+                    </p>
+                    <a href="tel:+18005551234" class="text-indigo-600 hover:text-indigo-800 font-medium">
+                        +1 (800) 555-1234
+                    </a>
+                </div>
+                
+                <!-- Office Card -->
+                <div class="contact-card bg-white p-8 rounded-xl shadow-md transition duration-300 text-center">
+                    <div class="flex items-center justify-center h-16 w-16 rounded-full bg-blue-100 text-blue-600 mb-4 mx-auto">
+                        <i class="fas fa-building text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">Visit Us</h3>
+                    <p class="text-gray-500 mb-4">
+                        Our headquarters in Boston, MA
+                    </p>
+                    <address class="text-indigo-600 not-italic">
+                        123 Education Way<br>Boston, MA 02108
+                    </address>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Form + Map -->
+    <section class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="md:flex md:space-x-8">
+                <!-- Contact Form -->
+                <div class="md:w-1/2 mb-12 md:mb-0 animate-fade-in">
+                    <h2 class="text-3xl font-extrabold text-gray-900 mb-6">Send Us a Message</h2>
+                    
+                    <% if (typeof message !== 'undefined') { %>
+                        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6" role="alert">
+                            <p><%= message %></p>
+                        </div>
+                    <% } %>
+                    
+                    <% if (typeof error !== 'undefined') { %>
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6" role="alert">
+                            <p><%= error %></p>
+                        </div>
+                    <% } %>
+                    
+                    <form id="contactForm" action="/contact" method="POST" class="space-y-6">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                            <input type="text" id="name" name="name" required
+                                class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
+                        </div>
+                        
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                            <input type="email" id="email" name="email" required
+                                class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
+                        </div>
+                        
+                        <div>
+                            <label for="subject" class="block text-sm font-medium text-gray-700 mb-1">Subject</label>
+                            <select id="subject" name="subject" required
+                                class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
+                                <option value="" disabled selected>Select a subject</option>
+                                <option value="General Inquiry">General Inquiry</option>
+                                <option value="Technical Support">Technical Support</option>
+                                <option value="Billing Question">Billing Question</option>
+                                <option value="Partnership">Partnership</option>
+                                <option value="Feedback">Feedback</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label for="message" class="block text-sm font-medium text-gray-700 mb-1">Message</label>
+                            <textarea id="message" name="message" rows="5" required
+                                class="form-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+                        </div>
+                        
+                        <div>
+                            <button type="submit"
+                                class="w-full bg-indigo-600 text-white px-6 py-3 rounded-lg text-lg font-medium hover:bg-indigo-700 transition duration-300">
+                                Send Message
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Map -->
+                <div class="md:w-1/2 animate-fade-in" style="animation-delay: 0.2s;">
+                    <h2 class="text-3xl font-extrabold text-gray-900 mb-6">Our Location</h2>
+                    <div class="map-container">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2948.665575997747!2d-71.06248992401757!3d42.34987237119269!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89e37a7dc2b67e7b%3A0x36ec93427cd9c5f1!2s123%20Education%20Way%2C%20Boston%2C%20MA%2002108!5e0!3m2!1sen!2sus!4v1620000000000!5m2!1sen!2sus" 
+                                width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                    
+                    <div class="mt-8 bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Office Hours</h3>
+                        <ul class="space-y-2">
+                            <li class="flex justify-between">
+                                <span class="text-gray-600">Monday - Friday</span>
+                                <span class="font-medium">9:00 AM - 5:00 PM</span>
+                            </li>
+                            <li class="flex justify-between">
+                                <span class="text-gray-600">Saturday</span>
+                                <span class="font-medium">10:00 AM - 2:00 PM</span>
+                            </li>
+                            <li class="flex justify-between">
+                                <span class="text-gray-600">Sunday</span>
+                                <span class="font-medium">Closed</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">Frequently Asked Questions</h2>
+                <p class="mt-4 max-w-2xl text-xl text-gray-500 mx-auto">
+                    Quick answers to common questions
+                </p>
+            </div>
+            
+            <div class="max-w-3xl mx-auto">
+                <!-- FAQ Item 1 -->
+                <div class="mb-6 border-b border-gray-200 pb-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">How quickly can I expect a response to my inquiry?</h3>
+                    <p class="text-gray-600">
+                        We typically respond to all inquiries within 24 hours during business days. For urgent matters, please call our support line.
+                    </p>
+                </div>
+                
+                <!-- FAQ Item 2 -->
+                <div class="mb-6 border-b border-gray-200 pb-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">Do you offer support for institutions?</h3>
+                    <p class="text-gray-600">
+                        Yes! We have dedicated account managers for educational institutions. Please select "Partnership" as your subject when contacting us.
+                    </p>
+                </div>
+                
+                <!-- FAQ Item 3 -->
+                <div class="mb-6 border-b border-gray-200 pb-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">Can I schedule a demo of College Hub?</h3>
+                    <p class="text-gray-600">
+                        Absolutely! Contact us to schedule a personalized demo for you or your institution.
+                    </p>
+                </div>
+                
+                <!-- FAQ Item 4 -->
+                <div class="mb-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-2">Where can I find documentation?</h3>
+                    <p class="text-gray-600">
+                        Our full documentation is available at <a href="/docs" class="text-indigo-600 hover:underline">docs.collegehub.edu</a>.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="gradient-bg text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-extrabold sm:text-4xl mb-6">Still have questions?</h2>
+            <p class="text-xl text-indigo-100 max-w-3xl mx-auto mb-8">
+                Our support team is ready to help you with any questions about College Hub.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="mailto:support@collegehub.edu" class="inline-flex items-center justify-center px-8 py-3 border border-transparent text-lg font-medium rounded-md text-indigo-600 bg-white hover:bg-gray-100">
+                    Email Support
+                </a>
+                <a href="tel:+18005551234" class="inline-flex items-center justify-center px-8 py-3 border border-white text-lg font-medium rounded-md text-white hover:bg-indigo-700">
+                    Call Now
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div class="col-span-2">
+                    <div class="flex items-center">
+                        <i class="fas fa-graduation-cap text-2xl text-indigo-400 mr-2"></i>
+                        <span class="text-xl font-bold">College Hub</span>
+                    </div>
+                    <p class="mt-4 text-gray-400">
+                        The all-in-one platform for modern students to manage their academic life.
+                    </p>
+                    <div class="mt-6 flex space-x-6">
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Product</h3>
+                    <ul class="mt-4 space-y-2">
+                        <li><a href="/features" class="text-gray-300 hover:text-white">Features</a></li>
+                        <li><a href="/pricing" class="text-gray-300 hover:text-white">Pricing</a></li>
+                        <li><a href="/updates" class="text-gray-300 hover:text-white">Updates</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Support</h3>
+                    <ul class="mt-4 space-y-2">
+                        <li><a href="/contact" class="text-gray-300 hover:text-white">Contact</a></li>
+                        <li><a href="/faq" class="text-gray-300 hover:text-white">FAQ</a></li>
+                        <li><a href="/docs" class="text-gray-300 hover:text-white">Documentation</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="mt-12 border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm">
+                    &copy; <%= new Date().getFullYear() %> College Hub. All rights reserved.
+                </p>
+                <div class="mt-4 md:mt-0">
+                    <a href="/privacy" class="text-gray-400 hover:text-white text-sm">Privacy Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Form validation
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value.trim();
+            
+            if (!name || !email || !subject || !message) {
+                e.preventDefault();
+                alert('Please fill in all fields');
+            }
+        });
+        
+        // Simple animation on scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-fade-in');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            document.querySelectorAll('.contact-card, .map-container').forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>

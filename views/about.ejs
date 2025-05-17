@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - College Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #6366f1;
+            --dark: #1e293b;
+            --light: #f8fafc;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+        }
+        
+        .team-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+        
+        .timeline-item:not(:last-child):after {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 24px;
+            height: calc(100% - 24px);
+            width: 2px;
+            background: var(--primary-light);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Navigation (Same as landing page) -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <i class="fas fa-graduation-cap text-2xl text-indigo-600 mr-2"></i>
+                        <span class="text-xl font-bold text-gray-900">College Hub</span>
+                    </div>
+                </div>
+                <div class="hidden md:ml-6 md:flex md:items-center md:space-x-8">
+                    <a href="/" class="text-gray-700 hover:text-indigo-600 px-3 py-2 text-sm font-medium">Home</a>
+                    <a href="/about" class="text-indigo-600 px-3 py-2 text-sm font-medium">About</a>
+                    <a href="/contact" class="text-gray-700 hover:text-indigo-600 px-3 py-2 text-sm font-medium">Contact</a>
+                </div>
+                <div class="flex items-center">
+                    <a href="/StudentLogin" class="text-gray-700 hover:text-indigo-600 px-3 py-2 text-sm font-medium mr-4">Login</a>
+                    <a href="/StudentRegister" class="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700">
+                        Get Started
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="gradient-bg text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-6">About College Hub</h1>
+            <p class="text-xl max-w-3xl mx-auto">Empowering students with tools for academic success since <%= new Date().getFullYear() - 2 %></p>
+        </div>
+    </section>
+
+    <!-- Our Story Section -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="md:flex md:items-center md:space-x-12">
+                <div class="md:w-1/2 mb-10 md:mb-0 animate-fade-in">
+                    <h2 class="text-3xl font-extrabold text-gray-900 mb-6">Our Story</h2>
+                    <p class="text-gray-600 mb-4">
+                        College Hub was born in a dorm room at State University when three frustrated students couldn't find a single platform to manage their academic lives. 
+                    </p>
+                    <p class="text-gray-600 mb-4">
+                        After struggling with scattered notes, missed deadlines, and lost study materials, we decided to build the solution ourselves. What started as a simple project quickly grew into a comprehensive platform used by thousands of students nationwide.
+                    </p>
+                    <p class="text-gray-600">
+                        Today, College Hub helps students at <%= new Date().getFullYear() - 2020 %>+ institutions stay organized, collaborate effectively, and achieve their academic goals.
+                    </p>
+                </div>
+                <div class="md:w-1/2 animate-fade-in" style="animation-delay: 0.2s;">
+                    <img src="/images/about-story.jpg" alt="Our founding team working together" class="rounded-lg shadow-xl w-full">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission Section -->
+    <section class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="max-w-3xl mx-auto">
+                <h2 class="text-3xl font-extrabold text-gray-900 mb-6">Our Mission</h2>
+                <p class="text-xl text-gray-600 mb-8">
+                    To simplify academic life by providing intuitive tools that help students focus on learning rather than organization.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <div class="flex items-center justify-center h-12 w-12 rounded-md bg-indigo-100 text-indigo-600 mb-4 mx-auto">
+                            <i class="fas fa-lightbulb text-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Innovate</h3>
+                        <p class="text-gray-500">
+                            Continuously develop solutions for real student challenges
+                        </p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <div class="flex items-center justify-center h-12 w-12 rounded-md bg-green-100 text-green-600 mb-4 mx-auto">
+                            <i class="fas fa-graduation-cap text-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Empower</h3>
+                        <p class="text-gray-500">
+                            Give students control over their academic journey
+                        </p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <div class="flex items-center justify-center h-12 w-12 rounded-md bg-blue-100 text-blue-600 mb-4 mx-auto">
+                            <i class="fas fa-users text-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Connect</h3>
+                        <p class="text-gray-500">
+                            Build communities of learners helping each other succeed
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">Meet The Team</h2>
+                <p class="mt-4 max-w-2xl text-xl text-gray-500 mx-auto">
+                    Passionate educators, developers, and student advocates
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+                <!-- Team Member 1 -->
+                <div class="team-card bg-white p-6 rounded-xl shadow-md transition duration-300 text-center">
+                    <img src="/images/team-1.jpg" alt="Alex Johnson" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover">
+                    <h3 class="text-lg font-medium text-gray-900 mb-1">Alex Johnson</h3>
+                    <p class="text-indigo-600 mb-3">Co-Founder & CEO</p>
+                    <p class="text-gray-500 text-sm">
+                        Former CS student who built the first prototype during finals week
+                    </p>
+                    <div class="mt-4 flex justify-center space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-indigo-600">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-indigo-600">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Team Member 2 -->
+                <div class="team-card bg-white p-6 rounded-xl shadow-md transition duration-300 text-center">
+                    <img src="/images/team-2.jpg" alt="Maria Garcia" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover">
+                    <h3 class="text-lg font-medium text-gray-900 mb-1">Maria Garcia</h3>
+                    <p class="text-indigo-600 mb-3">Head of Product</p>
+                    <p class="text-gray-500 text-sm">
+                        Education specialist focused on student experience
+                    </p>
+                    <div class="mt-4 flex justify-center space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-indigo-600">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-indigo-600">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Team Member 3 -->
+                <div class="team-card bg-white p-6 rounded-xl shadow-md transition duration-300 text-center">
+                    <img src="/images/team-3.jpg" alt="Sam Wilson" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover">
+                    <h3 class="text-lg font-medium text-gray-900 mb-1">Sam Wilson</h3>
+                    <p class="text-indigo-600 mb-3">CTO</p>
+                    <p class="text-gray-500 text-sm">
+                        Full-stack developer passionate about EdTech
+                    </p>
+                    <div class="mt-4 flex justify-center space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-indigo-600">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-indigo-600">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Team Member 4 -->
+                <div class="team-card bg-white p-6 rounded-xl shadow-md transition duration-300 text-center">
+                    <img src="/images/team-4.jpg" alt="Taylor Chen" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover">
+                    <h3 class="text-lg font-medium text-gray-900 mb-1">Taylor Chen</h3>
+                    <p class="text-indigo-600 mb-3">Student Success Lead</p>
+                    <p class="text-gray-500 text-sm">
+                        Works directly with students to improve our platform
+                    </p>
+                    <div class="mt-4 flex justify-center space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-indigo-600">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-indigo-600">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">Our Journey</h2>
+                <p class="mt-4 max-w-2xl text-xl text-gray-500 mx-auto">
+                    Milestones in our story
+                </p>
+            </div>
+            
+            <div class="max-w-3xl mx-auto">
+                <!-- Timeline Item 1 -->
+                <div class="relative pl-8 pb-8 timeline-item">
+                    <div class="absolute left-0 top-0 flex items-center justify-center w-4 h-4 rounded-full bg-indigo-600"></div>
+                    <h3 class="text-lg font-semibold text-gray-900">Founded</h3>
+                    <time class="block text-sm text-indigo-600 mb-2"><%= new Date().getFullYear() - 2 %> - Summer</time>
+                    <p class="text-gray-600">
+                        Three students created the first version to solve their own academic organization problems
+                    </p>
+                </div>
+                
+                <!-- Timeline Item 2 -->
+                <div class="relative pl-8 pb-8 timeline-item">
+                    <div class="absolute left-0 top-0 flex items-center justify-center w-4 h-4 rounded-full bg-indigo-600"></div>
+                    <h3 class="text-lg font-semibold text-gray-900">Beta Launch</h3>
+                    <time class="block text-sm text-indigo-600 mb-2"><%= new Date().getFullYear() - 1 %> - Spring</time>
+                    <p class="text-gray-600">
+                        Released to 5 universities with 1,000+ active users in first semester
+                    </p>
+                </div>
+                
+                <!-- Timeline Item 3 -->
+                <div class="relative pl-8 pb-8 timeline-item">
+                    <div class="absolute left-0 top-0 flex items-center justify-center w-4 h-4 rounded-full bg-indigo-600"></div>
+                    <h3 class="text-lg font-semibold text-gray-900">Official Launch</h3>
+                    <time class="block text-sm text-indigo-600 mb-2"><%= new Date().getFullYear() %> - January</time>
+                    <p class="text-gray-600">
+                        Expanded to 50+ institutions nationwide with premium features
+                    </p>
+                </div>
+                
+                <!-- Timeline Item 4 -->
+                <div class="relative pl-8 timeline-item">
+                    <div class="absolute left-0 top-0 flex items-center justify-center w-4 h-4 rounded-full bg-indigo-600"></div>
+                    <h3 class="text-lg font-semibold text-gray-900">Today</h3>
+                    <p class="text-gray-600">
+                        Helping thousands of students stay organized and succeed academically
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Values Section -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">Our Values</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <!-- Value 1 -->
+                <div class="flex">
+                    <div class="flex-shrink-0 mr-6">
+                        <div class="flex items-center justify-center h-12 w-12 rounded-md bg-indigo-100 text-indigo-600">
+                            <i class="fas fa-heart text-xl"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Student First</h3>
+                        <p class="text-gray-600">
+                            Every decision starts with "what's best for students?" We build tools that solve real problems students face daily.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Value 2 -->
+                <div class="flex">
+                    <div class="flex-shrink-0 mr-6">
+                        <div class="flex items-center justify-center h-12 w-12 rounded-md bg-green-100 text-green-600">
+                            <i class="fas fa-lock-open text-xl"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Transparency</h3>
+                        <p class="text-gray-600">
+                            We're open about our development process, pricing, and data practices. No hidden fees or surprises.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Value 3 -->
+                <div class="flex">
+                    <div class="flex-shrink-0 mr-6">
+                        <div class="flex items-center justify-center h-12 w-12 rounded-md bg-blue-100 text-blue-600">
+                            <i class="fas fa-lightbulb text-xl"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Continuous Improvement</h3>
+                        <p class="text-gray-600">
+                            We constantly refine our platform based on student feedback and changing academic needs.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Value 4 -->
+                <div class="flex">
+                    <div class="flex-shrink-0 mr-6">
+                        <div class="flex items-center justify-center h-12 w-12 rounded-md bg-purple-100 text-purple-600">
+                            <i class="fas fa-hands-helping text-xl"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Community</h3>
+                        <p class="text-gray-600">
+                            We believe students learn better together. Our tools foster collaboration and peer support.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="gradient-bg text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-extrabold sm:text-4xl mb-6">Ready to join our community?</h2>
+            <p class="text-xl text-indigo-100 max-w-3xl mx-auto mb-8">
+                Thousands of students are already using College Hub to stay organized and succeed academically.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="/StudentRegister" class="inline-flex items-center justify-center px-8 py-3 border border-transparent text-lg font-medium rounded-md text-indigo-600 bg-white hover:bg-gray-100">
+                    Get Started Free
+                </a>
+                <a href="/contact" class="inline-flex items-center justify-center px-8 py-3 border border-white text-lg font-medium rounded-md text-white hover:bg-indigo-700">
+                    Contact Us
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer (Same as landing page) -->
+    <footer class="bg-gray-900 text-white pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div class="col-span-2">
+                    <div class="flex items-center">
+                        <i class="fas fa-graduation-cap text-2xl text-indigo-400 mr-2"></i>
+                        <span class="text-xl font-bold">College Hub</span>
+                    </div>
+                    <p class="mt-4 text-gray-400">
+                        The all-in-one platform for modern students to manage their academic life.
+                    </p>
+                    <div class="mt-6 flex space-x-6">
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Product</h3>
+                    <ul class="mt-4 space-y-2">
+                        <li><a href="/features" class="text-gray-300 hover:text-white">Features</a></li>
+                        <li><a href="/updates" class="text-gray-300 hover:text-white">Updates</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Company</h3>
+                    <ul class="mt-4 space-y-2">
+                        <li><a href="/about" class="text-gray-300 hover:text-white">About</a></li>
+                        <li><a href="/careers" class="text-gray-300 hover:text-white">Careers</a></li>
+                        <li><a href="/privacy" class="text-gray-300 hover:text-white">Privacy</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="mt-12 border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm">
+                    &copy; <%= new Date().getFullYear() %> College Hub. All rights reserved.
+                </p>
+                <div class="mt-4 md:mt-0">
+                    <a href="/contact" class="text-gray-400 hover:text-white text-sm">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple animation on scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-fade-in');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            document.querySelectorAll('.timeline-item, .flex.flex').forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>
